@@ -1,366 +1,795 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight, Check, Clock, Shield, Headphones, Star, Users, Globe, Award, Plane, Car, Building, Sparkles, X } from 'lucide-react'
+import { 
+  Plane, 
+  Star, 
+  Users, 
+  Globe, 
+  Award, 
+  Shield, 
+  Clock, 
+  Headphones,
+  Car,
+  Building,
+  Sparkles,
+  X,
+  Phone,
+  Mail,
+  MapPin,
+  Instagram,
+  MessageCircle,
+  Check,
+  Network,
+  TrendingUp,
+  Crown,
+  Target,
+  Zap
+} from 'lucide-react'
 
 export default function HomePage() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const [showQuoteModal, setShowQuoteModal] = useState(false)
-  const [quoteStep, setQuoteStep] = useState(1)
-  const [quoteData, setQuoteData] = useState({
-    origem: '',
-    destino: '',
-    dataIda: '',
-    dataVolta: '',
-    passageiros: '1',
-    classe: 'Executiva',
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [formData, setFormData] = useState({
     nome: '',
     email: '',
-    whatsapp: '',
-    preferencias: ''
+    telefone: '',
+    destino: '',
+    orcamento: '',
+    mensagem: ''
   })
 
-  const testimonials = [
-    {
-      text: "A NIALY me economizou 8 horas de planejamento e me deu acesso a uma tarifa de executiva para Nova York 30% mais barata que em qualquer outro lugar. Para quem vive na correria, isso não é um luxo, é uma necessidade estratégica.",
-      author: "Carlos Mendes",
-      role: "CEO, TechCorp"
-    },
-    {
-      text: "Tive um voo cancelado de madrugada em Frankfurt. Em menos de 15 minutos, a equipe NIALY já tinha me realocado em um novo voo e reservado um lounge VIP. Eles transformaram um pesadelo em uma experiência de primeira classe.",
-      author: "Ana Silva",
-      role: "Diretora Comercial"
-    },
-    {
-      text: "Planejar a Disney para 3 crianças parecia um pesadelo logístico. A NIALY transformou tudo em um processo simples e mágico. Cuidaram de cada detalhe, dos parques aos restaurantes. Foram as melhores férias da nossa vida em família.",
-      author: "Roberto Costa",
-      role: "Empresário"
-    },
-    {
-      text: "Eu queria um roteiro complexo de 20 dias pelo Sudeste Asiático. A NIALY não só organizou toda a logística com perfeição, como conseguiu uma reserva em um restaurante que estava esgotado há meses. É esse nível de acesso que os diferencia.",
-      author: "Marina Oliveira",
-      role: "Investidora"
-    }
-  ]
-
-  const services = [
-    {
-      title: "Passagens Aéreas",
-      description: "Tarifas exclusivas e rotas inteligentes para executivos que valorizam tempo e conforto.",
-      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop"
-    },
-    {
-      title: "Transfer",
-      description: "Transporte premium porta a porta com motoristas selecionados e veículos de luxo.",
-      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop"
-    },
-    {
-      title: "Hospedagem",
-      description: "Hotéis e resorts cuidadosamente selecionados para uma experiência inesquecível.",
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
-    },
-    {
-      title: "Experiências Disney",
-      description: "Planejamento completo para a magia Disney, com acesso VIP e experiências exclusivas.",
-      image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&h=300&fit=crop"
-    }
-  ]
+  // Animação de números
+  const [counters, setCounters] = useState({
+    viagens: 0,
+    satisfacao: 0,
+    destinos: 0
+  })
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
-    }, 5000)
-    return () => clearInterval(interval)
+    const animateCounters = () => {
+      const targets = { viagens: 10000, satisfacao: 100, destinos: 50 }
+      const duration = 2000
+      const steps = 60
+      const stepTime = duration / steps
+
+      let currentStep = 0
+      const timer = setInterval(() => {
+        currentStep++
+        const progress = currentStep / steps
+
+        setCounters({
+          viagens: Math.floor(targets.viagens * progress),
+          satisfacao: Math.floor(targets.satisfacao * progress),
+          destinos: Math.floor(targets.destinos * progress)
+        })
+
+        if (currentStep >= steps) {
+          clearInterval(timer)
+          setCounters(targets)
+        }
+      }, stepTime)
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounters()
+          observer.disconnect()
+        }
+      })
+    })
+
+    const statsSection = document.getElementById('stats-section')
+    if (statsSection) {
+      observer.observe(statsSection)
+    }
+
+    return () => observer.disconnect()
   }, [])
 
-  const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
-  const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-  }
-
-  const handleQuoteSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (quoteStep < 3) {
-      setQuoteStep(quoteStep + 1)
-    } else {
-      // Aqui seria o envio dos dados
-      console.log('Dados da cotação:', quoteData)
-      setShowQuoteModal(false)
-      setQuoteStep(1)
-      // Redirecionar para página de agradecimento
-      window.location.href = '/obrigado-cotacao'
+    
+    try {
+      const response = await fetch('/api/cotacao', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        setIsModalOpen(false)
+        window.location.href = '/obrigado-cotacao'
+      }
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error)
     }
   }
 
-  const updateQuoteData = (field: string, value: string) => {
-    setQuoteData(prev => ({ ...prev, [field]: value }))
+  const handleFinalFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    try {
+      const response = await fetch('/api/cotacao', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        window.location.href = '/obrigado-cotacao'
+      }
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* SEÇÃO 1: HERO */}
+    <div className="min-h-screen">
+      {/* SEÇÃO 1: O GANCHO (HERO) - VÍDEO CINEMATOGRÁFICO */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=164&oauth2_token_id=57447761" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
-        
-        {/* Marca d'água */}
-        <div className="absolute top-20 right-20 opacity-5 text-[#C1A36F] text-[200px] font-serif pointer-events-none">
-          N
-        </div>
-
-        <div className="relative z-10 text-center text-white px-4 max-w-4xl">
-          <h1 className="text-6xl md:text-8xl mb-6">
-            <span className="block font-light text-4xl md:text-5xl mb-2">DESCUBRA SUA PRÓXIMA</span>
-            <span className="block font-serif font-bold">Jornada dos Sonhos</span>
-          </h1>
-          <p className="text-xl md:text-2xl mb-12 font-light max-w-2xl mx-auto">
-            A arquitetura da jornada executiva começa aqui
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <button 
-              onClick={() => setShowQuoteModal(true)}
-              className="bg-[#C1A36F] hover:bg-[#B8956A] text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-2xl"
-            >
-              INICIAR MEU PLANEJAMENTO
-            </button>
-            <button 
-              onClick={() => window.location.href = '/insiders'}
-              className="border-2 border-white hover:bg-white hover:text-[#0A1F44] text-white px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105"
-            >
-              GRUPO VIP EXCLUSIVO
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO 2: FILOSOFIA NIALY */}
-      <section className="py-20 bg-[#F4F6F9] relative">
-        <div className="absolute top-10 left-10 opacity-5 text-[#C1A36F] text-[150px] font-serif pointer-events-none">
-          N
-        </div>
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-serif text-[#0A1F44] mb-8">
-            A Filosofia NIALY
-          </h2>
-          <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-            Não somos apenas uma agência de viagens. Somos arquitetos de experiências que transformam jornadas em legados. 
-            Cada detalhe é pensado, cada momento é curado, cada viagem é uma obra-prima personalizada para quem entende 
-            que o extraordinário não é um luxo, é um padrão de vida.
-          </p>
-        </div>
-      </section>
-
-      {/* SEÇÃO 3: NÚMEROS DE AUTORIDADE */}
-      <section className="py-20 bg-[#0A1F44] text-white relative">
-        <div className="absolute bottom-10 right-10 opacity-10 text-[#C1A36F] text-[150px] font-serif pointer-events-none">
-          N
-        </div>
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#C1A36F] mb-2">2.847</div>
-              <div className="text-lg">Viagens Executadas</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#C1A36F] mb-2">98%</div>
-              <div className="text-lg">Taxa de Satisfação</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#C1A36F] mb-2">24/7</div>
-              <div className="text-lg">Suporte Disponível</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#C1A36F] mb-2">150+</div>
-              <div className="text-lg">Destinos Atendidos</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO 4: COMO FUNCIONA */}
-      <section className="py-20 bg-white relative">
-        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 opacity-5 text-[#C1A36F] text-[150px] font-serif pointer-events-none">
-          N
-        </div>
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-serif text-[#0A1F44] text-center mb-16">
-            Como Funciona
-          </h2>
-          <div className="relative max-w-6xl mx-auto">
-            {/* Linha curva SVG */}
-            <svg className="absolute top-1/2 left-0 w-full h-32 -translate-y-1/2 z-0" viewBox="0 0 800 100">
-              <path
-                d="M 50 50 Q 200 20, 350 50 T 750 50"
-                stroke="#C1A36F"
-                strokeWidth="3"
-                fill="none"
-                opacity="0.3"
-              />
-            </svg>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-white text-2xl font-bold">1</span>
-                </div>
-                <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Briefing Personalizado</h3>
-                <p className="text-gray-600">Entendemos suas necessidades, preferências e objetivos únicos</p>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-white text-2xl font-bold">2</span>
-                </div>
-                <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Curadoria Inteligente</h3>
-                <p className="text-gray-600">Nossa equipe seleciona as melhores opções baseadas no seu perfil</p>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-white text-2xl font-bold">3</span>
-                </div>
-                <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Execução Impecável</h3>
-                <p className="text-gray-600">Cuidamos de cada detalhe para uma experiência sem preocupações</p>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-white text-2xl font-bold">4</span>
-                </div>
-                <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Suporte Contínuo</h3>
-                <p className="text-gray-600">Acompanhamento 24/7 durante toda sua jornada</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO 5: DEPOIMENTOS */}
-      <section className="py-20 bg-[#F4F6F9] relative">
-        <div className="absolute bottom-20 left-20 opacity-5 text-[#C1A36F] text-[150px] font-serif pointer-events-none">
-          N
-        </div>
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-serif text-[#0A1F44] text-center mb-16">
-            O Que Nossos Clientes Dizem
-          </h2>
-          <div className="relative max-w-4xl mx-auto">
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
-              <div className="flex justify-center mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-6 h-6 text-[#C1A36F] fill-current" />
-                ))}
-              </div>
-              <blockquote className="text-xl md:text-2xl text-gray-700 text-center mb-8 leading-relaxed">
-                "{testimonials[currentTestimonial].text}"
-              </blockquote>
-              <div className="text-center">
-                <div className="font-semibold text-[#0A1F44] text-lg">
-                  {testimonials[currentTestimonial].author}
-                </div>
-                <div className="text-[#C1A36F]">
-                  {testimonials[currentTestimonial].role}
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={prevTestimonial}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-            >
-              <ChevronLeft className="w-6 h-6 text-[#0A1F44]" />
-            </button>
-            <button
-              onClick={nextTestimonial}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-            >
-              <ChevronRight className="w-6 h-6 text-[#0A1F44]" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* SEÇÃO 6: NOSSOS SERVIÇOS */}
-      <section className="py-20 bg-white relative">
-        <div className="absolute top-20 right-20 opacity-5 text-[#C1A36F] text-[150px] font-serif pointer-events-none">
-          N
-        </div>
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-serif text-[#0A1F44] text-center mb-16">
-            Nossos Serviços
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <div key={index} className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden">
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={service.image} 
-                    alt={service.title}
-                    className="w-full h-full object-cover rounded-t-3xl"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-[#0A1F44] mb-3">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </div>
-              </div>
+        {/* Vídeo cinematográfico simulado com partículas douradas */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-900 via-yellow-800 to-orange-900"></div>
+          <div className="absolute inset-0 bg-black bg-opacity-70"></div>
+          
+          {/* Partículas douradas animadas */}
+          <div className="absolute inset-0">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-2 h-2 bg-[#C1A36F] rounded-full opacity-60 animate-pulse"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${3 + Math.random() * 2}s`
+                }}
+              ></div>
             ))}
           </div>
         </div>
+        
+        <div className="relative z-10 text-center text-white px-4 max-w-5xl">
+          <h1 className="font-playfair mb-8 animate-fade-in-up">
+            <span className="block text-2xl md:text-4xl font-light mb-4 tracking-wider">DESCUBRA SUA PRÓXIMA</span>
+            <span className="block text-5xl md:text-8xl font-bold text-[#C1A36F] drop-shadow-2xl" style={{ textShadow: '0 0 30px rgba(193, 163, 111, 0.5)' }}>
+              Jornada dos Sonhos
+            </span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl font-montserrat font-light mb-12 max-w-4xl mx-auto leading-relaxed">
+            Onde cada detalhe é pensado para transformar sua viagem em uma experiência inesquecível. 
+            Deixe a complexidade conosco e viva apenas momentos extraordinários.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#C1A36F] hover:bg-[#A8925F] text-white font-bold py-6 px-12 rounded-2xl text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl backdrop-blur-sm"
+            >
+              INICIAR MEU PLANEJAMENTO
+            </button>
+            <a 
+              href="/insiders"
+              className="border-2 border-[#C1A36F] text-[#C1A36F] hover:bg-[#C1A36F] hover:text-white font-bold py-6 px-12 rounded-2xl text-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
+            >
+              GRUPO VIP EXCLUSIVO
+            </a>
+          </div>
+        </div>
       </section>
 
-      {/* SEÇÃO 7: CHAMADA FINAL */}
-      <section className="py-20 bg-[#0A1F44] text-white relative">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 text-[#C1A36F] text-[200px] font-serif pointer-events-none">
-          N
-        </div>
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-serif mb-6">
-                Pronto Para Sua Próxima Jornada?
-              </h2>
-              <p className="text-xl mb-8 opacity-90">
-                Deixe-nos criar a arquitetura da sua próxima experiência extraordinária. 
-                Cada detalhe pensado, cada momento curado especialmente para você.
+      {/* SEÇÃO 2: O PROBLEMA RESOLVIDO */}
+      <section className="py-20 px-4 bg-[#F4F6F9]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">
+              Viaje com Segurança e Tranquilidade
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-montserrat font-light leading-relaxed">
+              Eliminamos todas as preocupações da sua jornada para que você foque apenas em viver momentos extraordinários
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Check className="w-10 h-10 text-white" strokeWidth={3} />
+              </div>
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Compra Segura</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Transações protegidas e garantia total em todos os seus investimentos em viagem.
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Nome Completo"
-                    className="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                  />
-                  <input
-                    type="email"
-                    placeholder="E-mail"
-                    className="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                  />
+            
+            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Check className="w-10 h-10 text-white" strokeWidth={3} />
+              </div>
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Consultoria Especializada</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Experts em turismo de luxo dedicados exclusivamente ao seu projeto de viagem.
+              </p>
+            </div>
+            
+            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Check className="w-10 h-10 text-white" strokeWidth={3} />
+              </div>
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Atendimento Humanizado</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Relacionamento próximo e personalizado, tratando cada cliente como único.
+              </p>
+            </div>
+            
+            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <div className="w-20 h-20 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Check className="w-10 h-10 text-white" strokeWidth={3} />
+              </div>
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Suporte Completo</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Assistência 24/7 durante toda sua jornada, onde quer que você esteja.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO 3: A SOLUÇÃO (COMO FUNCIONA) - COM LINHA CURVA ANIMADA */}
+      <section className="py-20 px-4 bg-white relative">
+        {/* Logo N de fundo com baixa opacidade */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+          <div className="font-playfair text-[25rem] font-bold text-[#0A1F44] select-none">N</div>
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">Como Funciona</h2>
+            <p className="text-xl text-gray-600 font-montserrat font-light leading-relaxed">
+              Seu caminho para a experiência perfeita em 4 passos simples
+            </p>
+          </div>
+          
+          <div className="relative">
+            {/* Linha curva orgânica conectando os passos */}
+            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-20 -translate-y-10">
+              <svg className="w-full h-full" viewBox="0 0 1200 80" fill="none">
+                <path 
+                  d="M0 40 Q300 10 600 40 T1200 40" 
+                  stroke="#C1A36F" 
+                  strokeWidth="4" 
+                  fill="none"
+                  className="animate-pulse"
+                  style={{
+                    filter: 'drop-shadow(0 0 8px rgba(193, 163, 111, 0.3))'
+                  }}
+                />
+              </svg>
+            </div>
+            
+            <div className="grid lg:grid-cols-4 gap-8 relative z-10">
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-300">
+                  1
                 </div>
+                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Consulta Inicial</h3>
+                <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                  Entendemos seus desejos, necessidades e expectativas para sua jornada ideal.
+                </p>
+              </div>
+              
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-300">
+                  2
+                </div>
+                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Curadoria Personalizada</h3>
+                <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                  Criamos um roteiro único e exclusivo, pensado especialmente para você.
+                </p>
+              </div>
+              
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-300">
+                  3
+                </div>
+                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Aprovação e Reservas</h3>
+                <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                  Você aprova cada detalhe e nós cuidamos de todas as reservas e logística.
+                </p>
+              </div>
+              
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-8 shadow-2xl transform group-hover:scale-110 transition-all duration-300">
+                  4
+                </div>
+                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Experiência Única</h3>
+                <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                  Viva momentos inesquecíveis com total tranquilidade e suporte completo.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO 4: A FILOSOFIA NIALY - FUNDO AZUL-MARINHO COM EFEITO VIDRO FOSCO */}
+      <section className="py-20 px-4 bg-[#0A1F44] relative overflow-hidden">
+        {/* Efeito de partículas de fundo */}
+        <div className="absolute inset-0">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-[#C1A36F] rounded-full opacity-30 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${4 + Math.random() * 3}s`
+              }}
+            ></div>
+          ))}
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-white mb-6 uppercase">
+              O CÓDIGO NIALY: NOSSA FILOSOFIA
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto font-montserrat font-light leading-relaxed">
+              Cinco pilares fundamentais que guiam cada decisão e definem nossa excelência em turismo de luxo
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-5 gap-6">
+            <div 
+              className="p-8 rounded-2xl text-center transform hover:scale-105 transition-all duration-300"
+              style={{
+                background: 'rgba(10, 31, 68, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(193, 163, 111, 0.3)'
+              }}
+            >
+              <Network className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" strokeWidth={1} />
+              <h3 className="font-playfair text-2xl font-bold text-white mb-4 uppercase">Nexus</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed">
+                Conectamos você aos melhores destinos e experiências do mundo através de nossa rede exclusiva.
+              </p>
+            </div>
+            
+            <div 
+              className="p-8 rounded-2xl text-center transform hover:scale-105 transition-all duration-300"
+              style={{
+                background: 'rgba(10, 31, 68, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(193, 163, 111, 0.3)'
+              }}
+            >
+              <Zap className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" strokeWidth={1} />
+              <h3 className="font-playfair text-2xl font-bold text-white mb-4 uppercase">Innovation</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed">
+                Inovamos constantemente para oferecer soluções únicas e experiências revolucionárias.
+              </p>
+            </div>
+            
+            <div 
+              className="p-8 rounded-2xl text-center transform hover:scale-105 transition-all duration-300"
+              style={{
+                background: 'rgba(10, 31, 68, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(193, 163, 111, 0.3)'
+              }}
+            >
+              <TrendingUp className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" strokeWidth={1} />
+              <h3 className="font-playfair text-2xl font-bold text-white mb-4 uppercase">Ascend</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed">
+                Elevamos cada aspecto da sua jornada, superando expectativas e criando momentos sublimes.
+              </p>
+            </div>
+            
+            <div 
+              className="p-8 rounded-2xl text-center transform hover:scale-105 transition-all duration-300"
+              style={{
+                background: 'rgba(10, 31, 68, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(193, 163, 111, 0.3)'
+              }}
+            >
+              <Crown className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" strokeWidth={1} />
+              <h3 className="font-playfair text-2xl font-bold text-white mb-4 uppercase">Legacy</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed">
+                Construímos legados através de experiências que se tornam memórias eternas e transformadoras.
+              </p>
+            </div>
+            
+            <div 
+              className="p-8 rounded-2xl text-center transform hover:scale-105 transition-all duration-300"
+              style={{
+                background: 'rgba(10, 31, 68, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(193, 163, 111, 0.3)'
+              }}
+            >
+              <Target className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" strokeWidth={1} />
+              <h3 className="font-playfair text-2xl font-bold text-white mb-4 uppercase">Yield</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed">
+                Maximizamos o retorno de cada investimento em experiência, garantindo valor excepcional.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO 5: A AUTORIDADE (O ROSTO DA MARCA) */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">
+              Cuidando de Cada Detalhe da Sua Viagem
+            </h2>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="order-2 lg:order-1">
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=700&fit=crop&crop=face" 
+                alt="Nicolas Di Morais - Fundador NIALY" 
+                className="w-full h-[700px] object-cover rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] grayscale hover:grayscale-0 transition-all duration-500 transform hover:scale-105"
+              />
+            </div>
+            
+            <div className="order-1 lg:order-2">
+              <h3 className="font-playfair text-4xl font-bold text-[#0A1F44] mb-8 uppercase">Nicolas Di Morais</h3>
+              <p className="text-xl text-gray-600 mb-10 font-montserrat font-light leading-relaxed">
+                Fundador e CEO da NIALY, especialista em turismo de luxo com mais de 15 anos de experiência 
+                criando jornadas extraordinárias para executivos e empresários de alto padrão.
+              </p>
+              
+              <div className="space-y-6 mb-10">
+                <div className="flex items-center">
+                  <Award className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-gray-700 text-lg font-montserrat">Mais de 10.000 viagens de luxo organizadas</span>
+                </div>
+                <div className="flex items-center">
+                  <Globe className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-gray-700 text-lg font-montserrat">Parcerias exclusivas em 50+ destinos mundiais</span>
+                </div>
+                <div className="flex items-center">
+                  <Shield className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-gray-700 text-lg font-montserrat">100% de satisfação dos clientes</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-gray-700 text-lg font-montserrat">Suporte 24/7 em qualquer lugar do mundo</span>
+                </div>
+              </div>
+              
+              <blockquote className="p-8 bg-[#F4F6F9] rounded-2xl border-l-4 border-[#C1A36F] shadow-lg">
+                <p className="text-xl italic text-gray-700 font-montserrat font-light leading-relaxed mb-6">
+                  "Não vendemos viagens, arquitetamos experiências que se tornam legados. 
+                  Cada cliente é único, e cada jornada deve refletir essa singularidade."
+                </p>
+                <cite className="block font-playfair font-bold text-[#0A1F44] text-lg">- Nicolas Di Morais</cite>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO 6: A PROVA (OS NÚMEROS E VOZES) */}
+      {/* Subseção 6.1: Prova Quantitativa */}
+      <section id="stats-section" className="py-20 px-4 bg-[#0A1F44] relative overflow-hidden">
+        {/* Efeito de partículas douradas */}
+        <div className="absolute inset-0">
+          {[...Array(25)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-[#C1A36F] rounded-full opacity-40 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 4}s`,
+                animationDuration: `${3 + Math.random() * 2}s`
+              }}
+            ></div>
+          ))}
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-white mb-6 uppercase">
+              Por que Milhares de Viajantes Escolheram a NIALY?
+            </h2>
+            <p className="text-xl text-gray-300 font-montserrat font-light leading-relaxed">
+              Números que comprovam nossa excelência e dedicação
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-12 text-center">
+            <div className="transform hover:scale-105 transition-all duration-300">
+              <div className="text-7xl md:text-8xl font-bold text-[#C1A36F] mb-6 font-playfair">
+                +{counters.viagens.toLocaleString()}
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4 font-playfair uppercase">Viagens Realizadas</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed text-lg">
+                Experiências únicas criadas para nossos clientes exclusivos
+              </p>
+            </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300">
+              <div className="text-7xl md:text-8xl font-bold text-[#C1A36F] mb-6 font-playfair">
+                {counters.satisfacao}%
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4 font-playfair uppercase">Satisfeitos</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed text-lg">
+                Taxa de satisfação total dos nossos clientes
+              </p>
+            </div>
+            
+            <div className="transform hover:scale-105 transition-all duration-300">
+              <div className="text-7xl md:text-8xl font-bold text-[#C1A36F] mb-6 font-playfair">
+                {counters.destinos}+
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4 font-playfair uppercase">Destinos Exclusivos</h3>
+              <p className="text-gray-300 font-montserrat font-light leading-relaxed text-lg">
+                Países e destinos únicos em nossa curadoria
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Subseção 6.2: Prova Social (Depoimentos Nível Guru) */}
+      <section className="py-20 px-4 bg-[#F4F6F9]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">
+              O Que Nossos Clientes Estão Falando de Nós
+            </h2>
+            <p className="text-xl text-gray-600 font-montserrat font-light leading-relaxed">
+              Depoimentos reais de quem viveu experiências extraordinárias
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] transform hover:scale-105 transition-all duration-300">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex text-[#C1A36F]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-6 h-6 fill-current" />
+                  ))}
+                </div>
+                <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
+                  ✓ Verificado pelo Google
+                </div>
+              </div>
+              <p className="text-gray-700 text-lg mb-8 italic leading-relaxed font-montserrat font-light">
+                "A NIALY me economizou 8 horas de planejamento e me deu acesso a uma tarifa de executiva para Nova York 30% mais barata que em qualquer outro lugar. Para quem vive na correria, isso não é um luxo, é uma necessidade estratégica."
+              </p>
+              <div className="flex items-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  MC
+                </div>
+                <div className="ml-6">
+                  <h4 className="font-bold text-[#0A1F44] text-lg font-playfair">Marina Costa</h4>
+                  <p className="text-gray-600 font-montserrat">CEO, São Paulo</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] transform hover:scale-105 transition-all duration-300">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex text-[#C1A36F]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-6 h-6 fill-current" />
+                  ))}
+                </div>
+                <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
+                  ✓ Verificado pelo Google
+                </div>
+              </div>
+              <p className="text-gray-700 text-lg mb-8 italic leading-relaxed font-montserrat font-light">
+                "Tive um voo cancelado de madrugada em Frankfurt. Em menos de 15 minutos, a equipe NIALY já tinha me realocado em um novo voo e reservado um lounge VIP. Eles transformaram um pesadelo em uma experiência de primeira classe. Não viajo mais sem eles."
+              </p>
+              <div className="flex items-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  RS
+                </div>
+                <div className="ml-6">
+                  <h4 className="font-bold text-[#0A1F44] text-lg font-playfair">Roberto Silva</h4>
+                  <p className="text-gray-600 font-montserrat">Empresário, Rio de Janeiro</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO 7: NOSSOS SERVIÇOS - CONTEÚDO ATUALIZADO */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">Nossos Serviços</h2>
+            <p className="text-xl text-gray-600 font-montserrat font-light leading-relaxed">
+              Soluções completas para sua jornada perfeita
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <img 
+                src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop" 
+                alt="Asa de avião sobre nuvens" 
+                className="w-full h-48 object-cover rounded-xl mb-6 shadow-lg"
+              />
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Passagens Aéreas</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Conectamos você ao mundo com exclusividade e inteligência. Oferecemos remarcações facilitadas, 
+                seleção antecipada de assentos e suporte premium em cada etapa.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <img 
+                src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop" 
+                alt="Interior de um carro de luxo" 
+                className="w-full h-48 object-cover rounded-xl mb-6 shadow-lg"
+              />
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Transfer e Mobilidade</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Sua jornada com conforto do início ao fim. Oferecemos transfers privativos em todos os destinos, 
+                com veículos de luxo e motoristas experientes.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <img 
+                src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop" 
+                alt="Quarto de hotel de luxo com vista" 
+                className="w-full h-48 object-cover rounded-xl mb-6 shadow-lg"
+              />
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Hospedagem e Resorts</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Uma curadoria dos melhores hotéis e resorts do mundo. Garantimos a estadia perfeita, 
+                com pedidos especiais personalizados e experiências únicas.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
+              <img 
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop" 
+                alt="Castelo da Disney ao amanhecer" 
+                className="w-full h-48 object-cover rounded-xl mb-6 shadow-lg"
+              />
+              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Experiências Disney</h3>
+              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
+                Viva a magia com a sofisticação NIALY. Arquitetamos pacotes completos com ingressos, 
+                hospedagens nos melhores resorts e assistência personalizada.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEÇÃO 8: FORMULÁRIO FINAL - FUNDO PRETO COM VIDRO FOSCO */}
+      <section className="bg-black py-20 px-4 relative overflow-hidden">
+        {/* Efeito de partículas douradas */}
+        <div className="absolute inset-0">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-[#C1A36F] rounded-full opacity-20 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 6}s`,
+                animationDuration: `${4 + Math.random() * 3}s`
+              }}
+            ></div>
+          ))}
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="font-playfair text-4xl md:text-6xl font-bold text-white mb-8 uppercase">
+                Pronto Para Sua Próxima Jornada?
+              </h2>
+              <p className="text-xl text-gray-300 mb-10 font-montserrat font-light leading-relaxed">
+                Deixe-nos arquitetar a experiência dos seus sonhos. Cada detalhe será 
+                cuidadosamente planejado para superar suas expectativas.
+              </p>
+              <ul className="space-y-6 text-gray-300">
+                <li className="flex items-center">
+                  <Award className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-lg font-montserrat">Consultoria especializada gratuita</span>
+                </li>
+                <li className="flex items-center">
+                  <Shield className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-lg font-montserrat">Garantia de satisfação total</span>
+                </li>
+                <li className="flex items-center">
+                  <Clock className="w-8 h-8 text-[#C1A36F] mr-6" strokeWidth={2} />
+                  <span className="text-lg font-montserrat">Resposta em até 24 horas</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div 
+              className="p-10 rounded-2xl shadow-2xl"
+              style={{
+                background: 'rgba(10, 31, 68, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(193, 163, 111, 0.3)'
+              }}
+            >
+              <h3 className="font-playfair text-3xl font-bold text-white mb-8 text-center uppercase">
+                Solicite Sua Cotação
+              </h3>
+              <form onSubmit={handleFinalFormSubmit} className="space-y-6">
+                <input
+                  type="text"
+                  name="nome"
+                  placeholder="Seu nome completo"
+                  value={formData.nome}
+                  onChange={handleInputChange}
+                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Seu melhor e-mail"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  required
+                />
                 <input
                   type="tel"
-                  placeholder="WhatsApp"
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
+                  name="telefone"
+                  placeholder="WhatsApp com DDD"
+                  value={formData.telefone}
+                  onChange={handleInputChange}
+                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  required
                 />
-                <textarea
-                  placeholder="Conte-nos sobre sua próxima viagem..."
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-[#C1A36F] resize-none"
-                ></textarea>
-                <button
-                  type="submit"
-                  className="w-full bg-[#C1A36F] hover:bg-[#B8956A] text-white py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+                <input
+                  type="text"
+                  name="destino"
+                  placeholder="Destino desejado"
+                  value={formData.destino}
+                  onChange={handleInputChange}
+                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  required
+                />
+                <select
+                  name="orcamento"
+                  value={formData.orcamento}
+                  onChange={handleInputChange}
+                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  required
+                >
+                  <option value="" className="bg-[#0A1F44] text-white">Orçamento estimado</option>
+                  <option value="10k-25k" className="bg-[#0A1F44] text-white">R$ 10.000 - R$ 25.000</option>
+                  <option value="25k-50k" className="bg-[#0A1F44] text-white">R$ 25.000 - R$ 50.000</option>
+                  <option value="50k-100k" className="bg-[#0A1F44] text-white">R$ 50.000 - R$ 100.000</option>
+                  <option value="100k+" className="bg-[#0A1F44] text-white">Acima de R$ 100.000</option>
+                </select>
+                <button 
+                  type="submit" 
+                  className="bg-gradient-to-r from-[#C1A36F] to-[#A8925F] hover:from-[#A8925F] hover:to-[#8B7A4F] text-white font-bold py-5 px-10 rounded-xl w-full transition-all duration-300 transform hover:scale-105 shadow-2xl font-playfair text-lg uppercase"
                 >
                   SOLICITAR MINHA COTAÇÃO
                 </button>
@@ -370,201 +799,151 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RODAPÉ */}
-      <footer className="bg-[#0A1F44] text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      {/* RODAPÉ GLOBAL */}
+      <footer className="bg-[#0A1F44] py-16 px-4 border-t border-gray-700">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
-              <div className="text-3xl font-serif text-[#C1A36F] mb-4">NIALY</div>
-              <p className="text-gray-300">
-                A arquitetura da jornada executiva
+              <h3 className="font-playfair text-4xl font-bold text-[#C1A36F] mb-6">NIALY</h3>
+              <p className="text-gray-300 mb-6 font-montserrat font-light leading-relaxed">
+                A arquitetura da jornada executiva. Transformamos viagens em legados.
               </p>
             </div>
+            
             <div>
-              <h4 className="text-lg font-semibold mb-4">Links Rápidos</h4>
-              <ul className="space-y-2">
-                <li><a href="/" className="text-gray-300 hover:text-[#C1A36F] transition-colors">Início</a></li>
-                <li><a href="/cotacao" className="text-gray-300 hover:text-[#C1A36F] transition-colors">Cotação</a></li>
-                <li><a href="/insiders" className="text-gray-300 hover:text-[#C1A36F] transition-colors">Grupo VIP</a></li>
+              <h4 className="font-playfair font-bold text-white mb-6 text-xl uppercase">Links Rápidos</h4>
+              <ul className="space-y-3 text-gray-300">
+                <li><a href="/" className="hover:text-[#C1A36F] transition-colors font-montserrat">Início</a></li>
+                <li><a href="/cotacao" className="hover:text-[#C1A36F] transition-colors font-montserrat">Cotação</a></li>
+                <li><a href="/insiders" className="hover:text-[#C1A36F] transition-colors font-montserrat">Grupo VIP</a></li>
               </ul>
             </div>
+            
             <div>
-              <h4 className="text-lg font-semibold mb-4">Contato</h4>
-              <a href="tel:+5511921731022" className="text-gray-300 hover:text-[#C1A36F] transition-colors block">
-                +55 11 92173-1022
-              </a>
+              <h4 className="font-playfair font-bold text-white mb-6 text-xl uppercase">Contato</h4>
+              <ul className="space-y-4 text-gray-300">
+                <li className="flex items-center">
+                  <Phone className="w-5 h-5 mr-4 text-[#C1A36F]" />
+                  <span className="font-montserrat">(11) 99999-9999</span>
+                </li>
+                <li className="flex items-center">
+                  <Mail className="w-5 h-5 mr-4 text-[#C1A36F]" />
+                  <span className="font-montserrat">contato@nialy.com.br</span>
+                </li>
+                <li className="flex items-center">
+                  <MapPin className="w-5 h-5 mr-4 text-[#C1A36F]" />
+                  <span className="font-montserrat">São Paulo, SP</span>
+                </li>
+              </ul>
             </div>
+            
             <div>
-              <h4 className="text-lg font-semibold mb-4">Redes Sociais</h4>
-              <div className="flex space-x-4">
-                <a href="https://www.instagram.com/nialytravel/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#C1A36F] transition-colors">
-                  Instagram
+              <h4 className="font-playfair font-bold text-white mb-6 text-xl uppercase">Redes Sociais</h4>
+              <div className="flex space-x-6">
+                <a href="#" className="text-gray-300 hover:text-[#C1A36F] transition-colors transform hover:scale-110">
+                  <Instagram className="w-8 h-8" />
+                </a>
+                <a href="#" className="text-gray-300 hover:text-[#C1A36F] transition-colors transform hover:scale-110">
+                  <MessageCircle className="w-8 h-8" />
                 </a>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>© 2025 NIALY. Todos os direitos reservados.</p>
+          
+          <div className="border-t border-gray-700 pt-8 text-center text-gray-300">
+            <p className="font-montserrat">&copy; 2025 NIALY. Todos os direitos reservados. CNPJ/Cadastur aqui.</p>
           </div>
         </div>
       </footer>
 
       {/* MODAL DE COTAÇÃO */}
-      {showQuoteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-8">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-serif text-[#0A1F44]">Solicitar Cotação</h2>
-                <button
-                  onClick={() => {setShowQuoteModal(false); setQuoteStep(1)}}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              {/* Barra de Progresso */}
-              <div className="mb-8">
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm text-gray-600">Passo {quoteStep} de 3</span>
-                  <span className="text-sm text-gray-600">{Math.round((quoteStep / 3) * 100)}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-[#C1A36F] h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(quoteStep / 3) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <form onSubmit={handleQuoteSubmit}>
-                {quoteStep === 1 && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Detalhes da Sua Viagem</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="Origem"
-                        value={quoteData.origem}
-                        onChange={(e) => updateQuoteData('origem', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                        required
-                      />
-                      <input
-                        type="text"
-                        placeholder="Destino"
-                        value={quoteData.destino}
-                        onChange={(e) => updateQuoteData('destino', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input
-                        type="date"
-                        placeholder="Data de Ida"
-                        value={quoteData.dataIda}
-                        onChange={(e) => updateQuoteData('dataIda', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                        required
-                      />
-                      <input
-                        type="date"
-                        placeholder="Data de Volta"
-                        value={quoteData.dataVolta}
-                        onChange={(e) => updateQuoteData('dataVolta', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <select
-                        value={quoteData.passageiros}
-                        onChange={(e) => updateQuoteData('passageiros', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                      >
-                        <option value="1">1 Passageiro</option>
-                        <option value="2">2 Passageiros</option>
-                        <option value="3">3 Passageiros</option>
-                        <option value="4">4 Passageiros</option>
-                        <option value="5+">5+ Passageiros</option>
-                      </select>
-                      <select
-                        value={quoteData.classe}
-                        onChange={(e) => updateQuoteData('classe', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                      >
-                        <option value="Econômica">Econômica</option>
-                        <option value="Premium Economy">Premium Economy</option>
-                        <option value="Executiva">Executiva</option>
-                        <option value="Primeira Classe">Primeira Classe</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                {quoteStep === 2 && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Vamos nos Conhecer</h3>
-                    <input
-                      type="text"
-                      placeholder="Nome Completo"
-                      value={quoteData.nome}
-                      onChange={(e) => updateQuoteData('nome', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                      required
-                    />
-                    <input
-                      type="email"
-                      placeholder="E-mail"
-                      value={quoteData.email}
-                      onChange={(e) => updateQuoteData('email', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                      required
-                    />
-                    <input
-                      type="tel"
-                      placeholder="WhatsApp"
-                      value={quoteData.whatsapp}
-                      onChange={(e) => updateQuoteData('whatsapp', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F]"
-                      required
-                    />
-                  </div>
-                )}
-
-                {quoteStep === 3 && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-semibold text-[#0A1F44] mb-4">Preferências Especiais</h3>
-                    <textarea
-                      placeholder="Conte-nos suas expectativas, necessidades médicas, celebrações..."
-                      value={quoteData.preferencias}
-                      onChange={(e) => updateQuoteData('preferencias', e.target.value)}
-                      rows={6}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C1A36F] resize-none"
-                    ></textarea>
-                  </div>
-                )}
-
-                <div className="flex justify-between mt-8">
-                  {quoteStep > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => setQuoteStep(quoteStep - 1)}
-                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
-                    >
-                      Voltar
-                    </button>
-                  )}
-                  <button
-                    type="submit"
-                    className="ml-auto bg-[#C1A36F] hover:bg-[#B8956A] text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                  >
-                    {quoteStep === 3 ? 'RECEBER MINHA COTAÇÃO EXCLUSIVA' : 'Próximo'}
-                  </button>
-                </div>
-              </form>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div 
+            className="rounded-2xl p-10 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+            style={{
+              background: 'rgba(10, 31, 68, 0.95)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(193, 163, 111, 0.3)'
+            }}
+          >
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="font-playfair text-3xl font-bold text-white uppercase">
+                Solicite Sua Cotação
+              </h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-8 h-8" />
+              </button>
             </div>
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <input
+                type="text"
+                name="nome"
+                placeholder="Seu nome completo"
+                value={formData.nome}
+                onChange={handleInputChange}
+                className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Seu melhor e-mail"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                required
+              />
+              <input
+                type="tel"
+                name="telefone"
+                placeholder="WhatsApp com DDD"
+                value={formData.telefone}
+                onChange={handleInputChange}
+                className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                required
+              />
+              <input
+                type="text"
+                name="destino"
+                placeholder="Destino desejado"
+                value={formData.destino}
+                onChange={handleInputChange}
+                className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                required
+              />
+              <select
+                name="orcamento"
+                value={formData.orcamento}
+                onChange={handleInputChange}
+                className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                required
+              >
+                <option value="" className="bg-[#0A1F44] text-white">Orçamento estimado</option>
+                <option value="10k-25k" className="bg-[#0A1F44] text-white">R$ 10.000 - R$ 25.000</option>
+                <option value="25k-50k" className="bg-[#0A1F44] text-white">R$ 25.000 - R$ 50.000</option>
+                <option value="50k-100k" className="bg-[#0A1F44] text-white">R$ 50.000 - R$ 100.000</option>
+                <option value="100k+" className="bg-[#0A1F44] text-white">Acima de R$ 100.000</option>
+              </select>
+              <textarea
+                name="mensagem"
+                placeholder="Conte-nos mais sobre sua viagem dos sonhos..."
+                value={formData.mensagem}
+                onChange={handleInputChange}
+                rows={4}
+                className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+              ></textarea>
+              <button 
+                type="submit" 
+                className="bg-gradient-to-r from-[#C1A36F] to-[#A8925F] hover:from-[#A8925F] hover:to-[#8B7A4F] text-white font-bold py-5 px-10 rounded-xl w-full transition-all duration-300 transform hover:scale-105 shadow-2xl font-playfair text-lg uppercase"
+              >
+                ENVIAR SOLICITAÇÃO
+              </button>
+            </form>
           </div>
         </div>
       )}
