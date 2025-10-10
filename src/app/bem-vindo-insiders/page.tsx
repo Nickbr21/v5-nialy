@@ -1,17 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowRight, Star, MapPin, Calendar, Users, Crown } from 'lucide-react';
+import { Check, MapPin, Calendar, Users, Star, ExternalLink } from 'lucide-react';
 
-export default function BemVindoInsidersPage() {
+export default function IntermediariaInsidersPage() {
   const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCountdown((prev) => {
+      setCountdown(prev => {
         if (prev <= 1) {
           // Redirecionar para o WhatsApp (substitua pelo link real do grupo)
-          window.location.href = "https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no Grupo VIP NIALY e gostaria de ter acesso às ofertas exclusivas.";
+          window.location.href = "https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de fazer parte do grupo VIP!";
           return 0;
         }
         return prev - 1;
@@ -21,208 +21,224 @@ export default function BemVindoInsidersPage() {
     return () => clearInterval(timer);
   }, []);
 
+  const ofertas = [
+    {
+      destino: "MIAMI",
+      titulo: "Experiência Art Deco Premium",
+      preco: "R$ 45.000",
+      precoOriginal: "R$ 78.000",
+      desconto: "42% OFF",
+      duracao: "7 dias / 6 noites",
+      pessoas: "2 pessoas",
+      inclui: [
+        "Voos executivos diretos",
+        "Hotel 5 estrelas em South Beach",
+        "Transfer em Rolls Royce",
+        "Jantar no Joe's Stone Crab",
+        "Tour privativo de arte em Wynwood",
+        "Yacht day com chef a bordo"
+      ],
+      imagem: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop"
+    },
+    {
+      destino: "LISBOA",
+      titulo: "Charme Português Exclusivo",
+      preco: "R$ 38.000",
+      precoOriginal: "R$ 65.000",
+      desconto: "41% OFF",
+      duracao: "8 dias / 7 noites",
+      pessoas: "2 pessoas",
+      inclui: [
+        "Voos em classe executiva",
+        "Palácio convertido em hotel de luxo",
+        "Transfer em Mercedes Classe S",
+        "Degustação de vinhos no Douro",
+        "Aula de culinária com chef Michelin",
+        "Tour privativo pelos azulejos históricos"
+      ],
+      imagem: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600&h=400&fit=crop"
+    },
+    {
+      destino: "CANCÚN",
+      titulo: "Paraíso Maya Ultra-Luxo",
+      preco: "R$ 52.000",
+      precoOriginal: "R$ 89.000",
+      desconto: "42% OFF",
+      duracao: "6 dias / 5 noites",
+      pessoas: "2 pessoas",
+      inclui: [
+        "Jato privado para Cancún",
+        "Resort all-inclusive ultra-luxo",
+        "Butler service 24h",
+        "Mergulho nos cenotes sagrados",
+        "Jantar em restaurante subaquático",
+        "Spa maya com tratamentos ancestrais"
+      ],
+      imagem: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Background cinematográfico */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0A1F44] to-[#050505]"></div>
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#0A1F44] rounded-full blur-3xl animate-pulse"></div>
+    <div className="min-h-screen bg-gradient-to-br from-[#0A1F44] via-[#1a2f5a] to-black text-white">
+      {/* Header com countdown */}
+      <div className="bg-[#C1A36F] text-black py-4 text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <p className="text-lg font-bold font-montserrat">
+            🎉 BEM-VINDO AO NIALY INSIDERS! Redirecionando para o grupo em {countdown} segundos...
+          </p>
         </div>
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-6">
-        <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Mensagem de boas-vindas */}
+        <div className="text-center mb-16">
+          <div className="w-20 h-20 bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-8">
+            <Check className="w-10 h-10 text-black" />
+          </div>
           
-          {/* Header de boas-vindas */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Crown className="w-12 h-12 text-[#C1A36F]" />
-              <h1 className="text-5xl md:text-7xl font-bold">
-                BEM-VINDO AO
-                <br />
-                <span className="text-[#C1A36F]">GRUPO VIP</span>
-              </h1>
-              <Crown className="w-12 h-12 text-[#C1A36F]" />
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 font-playfair">
+            PARABÉNS!
+            <br />
+            <span className="text-[#C1A36F]">VOCÊ ESTÁ DENTRO</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto font-montserrat">
+            Você agora faz parte do grupo mais exclusivo de viajantes do Brasil. 
+            Aqui estão algumas das ofertas incríveis que nossos membros têm acesso:
+          </p>
+        </div>
+
+        {/* Ofertas exclusivas com imagens deslumbrantes */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+          {ofertas.map((oferta, index) => (
+            <div key={index} className="glass-effect rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+              {/* Imagem deslumbrante */}
+              <div className="relative h-64 overflow-hidden">
+                <img 
+                  src={oferta.imagem}
+                  alt={oferta.destino}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                  {oferta.desconto}
+                </div>
+                <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-lg">
+                  <div className="text-2xl font-bold font-playfair">{oferta.destino}</div>
+                </div>
+              </div>
+              
+              {/* Conteúdo */}
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-3 text-[#C1A36F] font-playfair">
+                  {oferta.titulo}
+                </h3>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="text-3xl font-bold text-white font-playfair">{oferta.preco}</div>
+                    <div className="text-gray-400 line-through text-sm font-montserrat">{oferta.precoOriginal}</div>
+                  </div>
+                  <div className="text-right text-sm text-gray-300 font-montserrat">
+                    <div className="flex items-center gap-1 mb-1">
+                      <Calendar className="w-4 h-4" />
+                      {oferta.duracao}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users className="w-4 h-4" />
+                      {oferta.pessoas}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2 mb-6">
+                  {oferta.inclui.slice(0, 4).map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-2 text-sm text-gray-300">
+                      <Check className="w-4 h-4 text-[#C1A36F] flex-shrink-0 mt-0.5" />
+                      <span className="font-montserrat">{item}</span>
+                    </div>
+                  ))}
+                  {oferta.inclui.length > 4 && (
+                    <div className="text-sm text-[#C1A36F] font-semibold font-montserrat">
+                      + {oferta.inclui.length - 4} outros benefícios exclusivos
+                    </div>
+                  )}
+                </div>
+                
+                <div className="bg-[#C1A36F] text-black text-center py-3 rounded-lg font-bold font-montserrat">
+                  EXCLUSIVO PARA INSIDERS
+                </div>
+              </div>
             </div>
-            
-            <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              Você agora faz parte de um seleto grupo de viajantes exclusivos!
+          ))}
+        </div>
+
+        {/* Informações sobre o grupo */}
+        <div className="glass-effect rounded-2xl p-8 mb-12">
+          <h2 className="text-3xl font-bold text-center mb-8 text-[#C1A36F] font-playfair">
+            O QUE VOCÊ ENCONTRARÁ NO GRUPO
+          </h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: <Star className="w-8 h-8 text-[#C1A36F]" />,
+                title: "Ofertas Flash",
+                description: "Descontos de até 70% em destinos premium"
+              },
+              {
+                icon: <Users className="w-8 h-8 text-[#C1A36F]" />,
+                title: "Networking",
+                description: "Conecte-se com outros executivos viajantes"
+              },
+              {
+                icon: <MapPin className="w-8 h-8 text-[#C1A36F]" />,
+                title: "Dicas Exclusivas",
+                description: "Informações privilegiadas de destinos"
+              },
+              {
+                icon: <Calendar className="w-8 h-8 text-[#C1A36F]" />,
+                title: "Eventos VIP",
+                description: "Convites para experiências únicas"
+              }
+            ].map((item, index) => (
+              <div key={index} className="text-center">
+                <div className="flex justify-center mb-4">
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-white font-playfair">{item.title}</h3>
+                <p className="text-gray-300 text-sm font-montserrat">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Call to action final */}
+        <div className="text-center">
+          <div className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black rounded-2xl p-8 inline-block">
+            <h3 className="text-2xl font-bold mb-4 font-playfair">
+              REDIRECIONAMENTO AUTOMÁTICO EM {countdown}s
+            </h3>
+            <p className="text-lg mb-6 font-montserrat">
+              Ou clique no botão abaixo para acessar imediatamente
             </p>
-            
-            {/* Contador de redirecionamento */}
-            <div className="bg-[rgba(193,163,111,0.2)] border border-[rgba(193,163,111,0.5)] rounded-xl p-6 inline-block">
-              <p className="text-lg mb-2">Redirecionando para o WhatsApp em:</p>
-              <div className="text-4xl font-bold text-[#C1A36F]">{countdown}s</div>
-            </div>
+            <a 
+              href="https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de fazer parte do grupo VIP!"
+              className="bg-black text-[#C1A36F] px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 font-montserrat"
+            >
+              ACESSAR GRUPO AGORA
+              <ExternalLink className="w-5 h-5" />
+            </a>
           </div>
+        </div>
 
-          {/* Ofertas exemplo com imagens deslumbrantes */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-12">
-              VEJA ALGUMAS DAS OFERTAS EXCLUSIVAS QUE VOCÊ RECEBERÁ
-            </h2>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "SANTORINI PRIVATIVO",
-                  location: "Grécia",
-                  duration: "7 dias",
-                  guests: "2 pessoas",
-                  originalPrice: "R$ 120.000",
-                  vipPrice: "R$ 72.000",
-                  discount: "40% OFF",
-                  image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&h=400&fit=crop",
-                  highlights: [
-                    "Villa com piscina infinita",
-                    "Chef particular incluso",
-                    "Iate privado para ilhas",
-                    "Helicóptero para transfers"
-                  ]
-                },
-                {
-                  title: "DUBAI IMPERIAL",
-                  location: "Emirados Árabes",
-                  duration: "5 dias",
-                  guests: "2 pessoas",
-                  originalPrice: "R$ 180.000",
-                  vipPrice: "R$ 126.000",
-                  discount: "30% OFF",
-                  image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&h=400&fit=crop",
-                  highlights: [
-                    "Burj Al Arab Royal Suite",
-                    "Jato privado incluso",
-                    "Desert safari exclusivo",
-                    "Compras VIP nos malls"
-                  ]
-                },
-                {
-                  title: "PATAGÔNIA SELVAGEM",
-                  location: "Chile & Argentina",
-                  duration: "10 dias",
-                  guests: "4 pessoas",
-                  originalPrice: "R$ 200.000",
-                  vipPrice: "R$ 140.000",
-                  discount: "30% OFF",
-                  image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&h=400&fit=crop",
-                  highlights: [
-                    "Lodge exclusivo EcoCamp",
-                    "Helicóptero para glaciares",
-                    "Guia naturalista privado",
-                    "Trekking em Torres del Paine"
-                  ]
-                }
-              ].map((offer, index) => (
-                <div key={index} className="bg-[rgba(10,31,68,0.8)] backdrop-blur-sm border border-[rgba(193,163,111,0.3)] rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
-                  
-                  {/* Imagem principal */}
-                  <div className="relative">
-                    <img 
-                      src={offer.image}
-                      alt={offer.title}
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full font-bold">
-                      {offer.discount}
-                    </div>
-                    <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm rounded-lg p-3">
-                      <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="w-4 h-4 text-[#C1A36F]" />
-                        <span>{offer.location}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Conteúdo */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-4">{offer.title}</h3>
-                    
-                    {/* Detalhes da viagem */}
-                    <div className="flex items-center gap-6 mb-6 text-sm text-gray-300">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#C1A36F]" />
-                        <span>{offer.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-[#C1A36F]" />
-                        <span>{offer.guests}</span>
-                      </div>
-                    </div>
-                    
-                    {/* Preços */}
-                    <div className="mb-6">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-gray-400 line-through text-lg">{offer.originalPrice}</span>
-                        <span className="text-3xl font-bold text-[#C1A36F]">{offer.vipPrice}</span>
-                      </div>
-                      <p className="text-sm text-gray-400">Economia de {offer.originalPrice.replace('R$ ', '').replace('.000', '')} - {offer.vipPrice.replace('R$ ', '').replace('.000', '')} = R$ {(parseInt(offer.originalPrice.replace('R$ ', '').replace('.000', '')) - parseInt(offer.vipPrice.replace('R$ ', '').replace('.000', ''))).toLocaleString()}</p>
-                    </div>
-                    
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {offer.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm">
-                          <Star className="w-4 h-4 text-[#C1A36F] fill-current" />
-                          <span className="text-gray-300">{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Instruções finais */}
-          <div className="text-center">
-            <div className="bg-[rgba(10,31,68,0.8)] backdrop-blur-sm border border-[rgba(193,163,111,0.3)] rounded-2xl p-8 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold mb-6 text-[#C1A36F]">
-                🎉 PARABÉNS! VOCÊ AGORA É MEMBRO VIP
-              </h3>
-              
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
-                <div className="text-left">
-                  <h4 className="font-bold mb-3">O QUE VOCÊ RECEBERÁ:</h4>
-                  <ul className="space-y-2 text-sm text-gray-300">
-                    <li>• Ofertas exclusivas semanais</li>
-                    <li>• Descontos de até 40% em pacotes premium</li>
-                    <li>• Acesso antecipado a novos destinos</li>
-                    <li>• Suporte prioritário 24/7</li>
-                    <li>• Consultoria gratuita personalizada</li>
-                  </ul>
-                </div>
-                
-                <div className="text-left">
-                  <h4 className="font-bold mb-3">COMO FUNCIONA:</h4>
-                  <ul className="space-y-2 text-sm text-gray-300">
-                    <li>• Ofertas enviadas via WhatsApp</li>
-                    <li>• Vagas limitadas (primeiro a responder)</li>
-                    <li>• Sem compromisso de compra</li>
-                    <li>• Pode sair do grupo a qualquer momento</li>
-                    <li>• 100% gratuito para sempre</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="bg-[rgba(193,163,111,0.1)] border border-[rgba(193,163,111,0.3)] rounded-xl p-6">
-                <p className="text-lg font-semibold mb-2">
-                  Você será redirecionado automaticamente para nosso grupo VIP no WhatsApp
-                </p>
-                <p className="text-gray-300 text-sm">
-                  Caso não seja redirecionado, clique no botão abaixo para acessar manualmente
-                </p>
-                
-                <a 
-                  href="https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no Grupo VIP NIALY e gostaria de ter acesso às ofertas exclusivas."
-                  className="inline-flex items-center gap-3 bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-8 py-4 rounded-xl font-bold mt-6 hover:scale-105 transition-all duration-300"
-                >
-                  ACESSAR GRUPO VIP AGORA
-                  <ArrowRight className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
+        {/* Mensagem de boas-vindas final */}
+        <div className="mt-16 text-center">
+          <p className="text-xl text-gray-300 italic max-w-3xl mx-auto leading-relaxed font-montserrat">
+            "Bem-vindo à família NIALY Insiders. Prepare-se para descobrir um mundo de 
+            possibilidades que poucos têm o privilégio de conhecer."
+          </p>
+          <div className="mt-4 text-[#C1A36F] font-bold text-lg font-playfair">
+            — Equipe NIALY
           </div>
         </div>
       </div>
