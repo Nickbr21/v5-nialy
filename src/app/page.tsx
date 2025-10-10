@@ -1,102 +1,136 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { ChevronDown, Star, Users, Globe, Award, ArrowRight, Play, CheckCircle, Phone, Mail, MapPin } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react';
+import { ChevronRight, Play, Star, Check, ArrowRight, Phone, Mail, Instagram, MapPin } from 'lucide-react';
 
-export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+export default function HomePage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    nome: '',
     email: '',
-    phone: '',
-    destination: '',
-    budget: '',
-    travelers: '',
-    dates: '',
-    preferences: ''
-  })
-
-  // Animação de contadores otimizada
+    telefone: '',
+    destino: '',
+    orcamento: '',
+    mensagem: ''
+  });
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [counters, setCounters] = useState({
-    clients: 0,
-    destinations: 0,
-    satisfaction: 0
-  })
+    clientes: 0,
+    satisfacao: 0,
+    destinos: 0,
+    experiencia: 0
+  });
 
+  const heroRef = useRef<HTMLElement>(null);
+  const statsRef = useRef<HTMLElement>(null);
+
+  // Animação dos contadores
   useEffect(() => {
-    const animateCounters = () => {
-      const targets = { clients: 500, destinations: 120, satisfaction: 98 }
-      const duration = 2000
-      const steps = 50
-      const increment = {
-        clients: targets.clients / steps,
-        destinations: targets.destinations / steps,
-        satisfaction: targets.satisfaction / steps
-      }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target === statsRef.current) {
+            animateCounters();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-      let step = 0
-      const timer = setInterval(() => {
-        step++
-        setCounters({
-          clients: Math.min(Math.floor(increment.clients * step), targets.clients),
-          destinations: Math.min(Math.floor(increment.destinations * step), targets.destinations),
-          satisfaction: Math.min(Math.floor(increment.satisfaction * step), targets.satisfaction)
-        })
-
-        if (step >= steps) clearInterval(timer)
-      }, duration / steps)
-
-      return timer
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          animateCounters()
-          observer.disconnect()
-        }
-      })
-    }, { threshold: 0.5 })
+    return () => observer.disconnect();
+  }, []);
 
-    const statsSection = document.getElementById('stats-section')
-    if (statsSection) observer.observe(statsSection)
+  const animateCounters = () => {
+    const targets = { clientes: 10000, satisfacao: 100, destinos: 150, experiencia: 15 };
+    const duration = 2000;
+    const steps = 60;
+    const stepTime = duration / steps;
 
-    return () => observer.disconnect()
-  }, [])
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      const progress = step / steps;
+      
+      setCounters({
+        clientes: Math.floor(targets.clientes * progress),
+        satisfacao: Math.floor(targets.satisfacao * progress),
+        destinos: Math.floor(targets.destinos * progress),
+        experiencia: Math.floor(targets.experiencia * progress)
+      });
+
+      if (step >= steps) {
+        clearInterval(timer);
+        setCounters(targets);
+      }
+    }, stepTime);
+  };
+
+  // Carrossel de depoimentos
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const testimonials = [
+    {
+      name: "Ricardo Mendes",
+      role: "CEO, Tech Solutions",
+      text: "A NIALY transformou completamente nossa visão sobre viagens corporativas. Cada detalhe foi pensado com uma precisão que jamais experimentamos antes.",
+      rating: 5,
+      verified: true
+    },
+    {
+      name: "Marina Silva",
+      role: "Diretora de Marketing",
+      text: "Não é apenas uma agência, é uma experiência de vida. A curadoria dos destinos e o atendimento personalizado superam qualquer expectativa.",
+      rating: 5,
+      verified: true
+    },
+    {
+      name: "Carlos Eduardo",
+      role: "Empresário",
+      text: "Depois da NIALY, não consigo mais viajar de outra forma. O nível de sofisticação e cuidado com cada momento da jornada é incomparável.",
+      rating: 5,
+      verified: true
+    },
+    {
+      name: "Ana Beatriz",
+      role: "Arquiteta",
+      text: "Cada viagem se tornou um marco na minha vida. A NIALY não vende destinos, ela constrói memórias que se tornam parte de quem somos.",
+      rating: 5,
+      verified: true
+    }
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Simular envio com feedback visual
-    const submitButton = e.target as HTMLFormElement
-    const button = submitButton.querySelector('button[type="submit"]') as HTMLButtonElement
-    
-    if (button) {
-      button.textContent = 'ENVIANDO...'
-      button.disabled = true
-    }
+    e.preventDefault();
+    // Aqui seria a integração com o backend
+    console.log('Formulário enviado:', formData);
+    setIsModalOpen(false);
+    // Redirecionar para página de agradecimento
+  };
 
-    setTimeout(() => {
-      alert('Briefing recebido! Em breve entraremos em contato.')
-      setIsModalOpen(false)
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        destination: '',
-        budget: '',
-        travelers: '',
-        dates: '',
-        preferences: ''
-      })
-    }, 1000)
-  }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#EAEAEA] overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Fundo cinematográfico com textura */}
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* HERO SECTION */}
+      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Background cinematográfico */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0A1F44] to-[#050505]"></div>
+        
+        {/* Textura dourada sutil */}
         <div 
           className="absolute inset-0 opacity-30"
           style={{
@@ -106,267 +140,516 @@ export default function Home() {
         
         {/* Efeitos de luz cinematográficos */}
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#0A1F44] rounded-full blur-3xl"></div>
         </div>
 
-        {/* Logo N de fundo */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-[20rem] font-bold text-white opacity-5 font-serif select-none pointer-events-none">N</div>
+        {/* Logo NIALY em background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-[20rem] font-bold text-white opacity-5 select-none">
+            NIALY
+          </div>
         </div>
 
         {/* Conteúdo principal */}
-        <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold font-serif uppercase leading-tight mb-8 animate-fade-in-up">
-            VOCÊ NÃO COMPRA UMA VIAGEM.<br />
-            <span className="text-[#D4AF37]">VOCÊ COMISSIONA UMA EXPERIÊNCIA.</span>
+        <div className="relative z-10 text-center max-w-6xl mx-auto px-6">
+          <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+            DESCUBRA SUA PRÓXIMA
+            <br />
+            <span className="text-[#C1A36F] drop-shadow-2xl">
+              Jornada dos Sonhos
+            </span>
           </h1>
           
-          <p className="text-lg sm:text-xl md:text-2xl font-light mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            Para líderes que não têm tempo a perder e exigem nada menos que a perfeição absoluta. Este é o seu atelier.
+          <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed text-gray-300 font-light">
+            Onde cada detalhe é pensado para transformar sua viagem em uma experiência inesquecível. 
+            Deixe a complexidade conosco e viva apenas momentos extraordinários.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="btn-primary flex items-center gap-3 text-lg px-8 py-4 rounded-xl bg-[#D4AF37] hover:bg-[#C1A36F] transition-all duration-300 transform hover:scale-105 shadow-2xl text-black font-bold"
+              className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50"
             >
-              INICIAR CONSULTA
-              <ArrowRight className="w-5 h-5" />
+              INICIAR MEU PLANEJAMENTO
             </button>
             
-            <button className="btn-secondary flex items-center gap-3 text-lg px-8 py-4 rounded-xl border-2 border-white hover:bg-white hover:text-[#0A1F44] transition-all duration-300 transform hover:scale-105">
-              <Play className="w-5 h-5" />
-              O ATELIER VIP
-            </button>
+            <a 
+              href="/insiders"
+              className="border-2 border-[#C1A36F] text-[#C1A36F] px-12 py-4 rounded-xl text-lg font-bold hover:bg-[#C1A36F] hover:text-black transition-all duration-300"
+            >
+              GRUPO VIP EXCLUSIVO
+            </a>
           </div>
         </div>
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-8 h-8 text-[#D4AF37]" />
+          <div className="w-6 h-10 border-2 border-[#C1A36F] rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-[#C1A36F] rounded-full mt-2 animate-pulse"></div>
+          </div>
         </div>
       </section>
 
-      {/* Diagnóstico Section */}
-      <section className="py-20 px-4 bg-gradient-to-b from-[#050505] to-[#0A1F44]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-serif mb-6 text-[#D4AF37]">
-              O DIAGNÓSTICO
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Você já percebeu que as "viagens de luxo" do mercado são apenas versões caras do comum?
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* COMO FUNCIONA */}
+      <section className="py-24 bg-[#F4F6F9] text-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44]">
+            COMO FUNCIONA
+          </h2>
+          
+          <div className="grid md:grid-cols-4 gap-8 relative">
+            {/* Linha conectora */}
+            <div className="hidden md:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-[#C1A36F] via-[#D4AF37] to-[#C1A36F] opacity-30"></div>
+            
             {[
               {
-                title: "EXPERIÊNCIAS PADRONIZADAS",
-                description: "Hotéis 5 estrelas iguais em qualquer lugar do mundo. Roteiros copiados de guias turísticos.",
-                icon: <Users className="w-12 h-12 text-[#D4AF37]" />
+                step: "01",
+                title: "CONSULTA INICIAL",
+                description: "Conversamos sobre seus sonhos, preferências e expectativas para criar o perfil perfeito da sua jornada."
               },
               {
-                title: "ATENDIMENTO SUPERFICIAL",
-                description: "Agentes que vendem pacotes prontos sem entender sua personalidade e necessidades únicas.",
-                icon: <Globe className="w-12 h-12 text-[#D4AF37]" />
+                step: "02", 
+                title: "CURADORIA EXCLUSIVA",
+                description: "Nossa equipe desenvolve um roteiro personalizado com experiências únicas e acomodações de ultra-luxo."
               },
               {
-                title: "FALTA DE EXCLUSIVIDADE",
-                description: "Você paga premium para dividir experiências com centenas de outros turistas.",
-                icon: <Award className="w-12 h-12 text-[#D4AF37]" />
+                step: "03",
+                title: "APROVAÇÃO & AJUSTES",
+                description: "Apresentamos sua jornada completa e fazemos os ajustes necessários até atingir a perfeição."
+              },
+              {
+                step: "04",
+                title: "EXPERIÊNCIA INESQUECÍVEL",
+                description: "Você vive cada momento sem preocupações, com suporte 24h e todos os detalhes cuidadosamente orquestrados."
               }
             ].map((item, index) => (
-              <div key={index} className="card-luxury bg-white/5 backdrop-blur-sm border border-[#D4AF37]/20 p-8 rounded-2xl hover:bg-white/10 transition-all duration-300">
-                <div className="mb-6">{item.icon}</div>
-                <h3 className="text-2xl font-bold font-serif mb-4 text-[#D4AF37]">{item.title}</h3>
-                <p className="text-gray-300 leading-relaxed">{item.description}</p>
+              <div key={index} className="text-center relative">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center text-black font-bold text-xl mx-auto mb-6 shadow-xl relative z-10">
+                  {item.step}
+                </div>
+                <h3 className="text-xl font-bold mb-4 text-[#0A1F44]">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Solução Section */}
-      <section className="py-20 px-4 bg-[#0A1F44]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-serif mb-6 text-[#D4AF37]">
-              A SOLUÇÃO NIALY
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Não vendemos viagens. Arquitetamos legados. Cada jornada é uma obra de arte única.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              {[
-                {
-                  title: "CURADORIA ABSOLUTA",
-                  description: "Cada experiência é desenhada do zero, baseada no seu perfil psicológico e objetivos pessoais."
-                },
-                {
-                  title: "ACESSO EXCLUSIVO",
-                  description: "Locais fechados ao público, experiências privadas, encontros com personalidades influentes."
-                },
-                {
-                  title: "CONSULTORIA ESTRATÉGICA",
-                  description: "Suas viagens se tornam investimentos em networking, crescimento pessoal e expansão de negócios."
-                }
-              ].map((item, index) => (
-                <div key={index} className="flex gap-4">
-                  <CheckCircle className="w-8 h-8 text-[#D4AF37] flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="text-2xl font-bold font-serif mb-2 text-[#D4AF37]">{item.title}</h3>
-                    <p className="text-gray-300 leading-relaxed">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="relative">
-              <div className="bg-gradient-to-br from-[#D4AF37]/20 to-[#0A1F44]/20 backdrop-blur-sm border border-[#D4AF37]/30 rounded-2xl p-8">
-                <div className="text-center">
-                  <div className="text-6xl font-bold font-serif text-[#D4AF37] mb-4">98%</div>
-                  <p className="text-xl text-gray-300 mb-6">dos nossos clientes renovam anualmente</p>
-                  <div className="flex justify-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-8 h-8 text-[#D4AF37] fill-current" />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* FILOSOFIA NIALY */}
+      <section className="py-24 bg-[#0A1F44] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C1A36F]/20 to-transparent"></div>
         </div>
-      </section>
-
-      {/* Stats Section */}
-      <section id="stats-section" className="py-20 px-4 bg-gradient-to-b from-[#0A1F44] to-[#050505]">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="animate-count-up">
-              <div className="text-6xl font-bold font-serif text-[#D4AF37] mb-4">{counters.clients}+</div>
-              <p className="text-xl text-gray-300">Executivos Atendidos</p>
-            </div>
-            <div className="animate-count-up">
-              <div className="text-6xl font-bold font-serif text-[#D4AF37] mb-4">{counters.destinations}+</div>
-              <p className="text-xl text-gray-300">Destinos Exclusivos</p>
-            </div>
-            <div className="animate-count-up">
-              <div className="text-6xl font-bold font-serif text-[#D4AF37] mb-4">{counters.satisfaction}%</div>
-              <p className="text-xl text-gray-300">Satisfação Total</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Prova Social Section */}
-      <section className="py-20 px-4 bg-[#050505]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-serif mb-6 text-[#D4AF37]">
-              DEPOIMENTOS
-            </h2>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8">
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <h2 className="text-5xl font-bold text-center mb-20">
+            O CÓDIGO NIALY: NOSSA FILOSOFIA
+          </h2>
+          
+          <div className="grid md:grid-cols-5 gap-6">
             {[
               {
-                text: "A NIALY não organizou uma viagem, ela arquitetou uma transformação. Cada detalhe foi pensado para expandir minha visão de mundo e minha rede de contatos.",
-                author: "Ricardo M.",
-                role: "CEO, Grupo Empresarial"
+                letter: "N",
+                word: "NEXUS",
+                description: "Conectamos pessoas a experiências que transcendem o comum, criando vínculos profundos com destinos únicos."
               },
               {
-                text: "Finalmente encontrei uma agência que entende que tempo é o meu ativo mais valioso. Eles cuidam de tudo para que eu foque apenas em viver experiências únicas.",
-                author: "Ana Paula S.",
-                role: "Investidora e Empreendedora"
+                letter: "I", 
+                word: "INNOVATION",
+                description: "Inovamos constantemente para oferecer soluções de viagem que antecipam e superam expectativas."
+              },
+              {
+                letter: "A",
+                word: "ASCEND", 
+                description: "Elevamos cada jornada a um patamar superior, transformando viagens em marcos de vida."
+              },
+              {
+                letter: "L",
+                word: "LEGACY",
+                description: "Construímos legados através de memórias inesquecíveis que se tornam parte da sua história."
+              },
+              {
+                letter: "Y",
+                word: "YIELD",
+                description: "Geramos resultados que vão além do esperado, entregando valor em cada momento da experiência."
               }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-white/5 backdrop-blur-sm border border-[#D4AF37]/20 rounded-2xl p-8">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-6 h-6 text-[#D4AF37] fill-current" />
-                  ))}
-                </div>
-                <p className="text-lg text-gray-300 mb-6 leading-relaxed italic">"{testimonial.text}"</p>
-                <div>
-                  <p className="font-bold text-[#D4AF37]">{testimonial.author}</p>
-                  <p className="text-gray-400">{testimonial.role}</p>
-                </div>
+            ].map((item, index) => (
+              <div 
+                key={index} 
+                className="bg-[rgba(10,31,68,0.8)] backdrop-blur-sm border border-[rgba(193,163,111,0.3)] rounded-xl p-8 text-center hover:scale-105 transition-all duration-300 hover:bg-[rgba(193,163,111,0.1)]"
+              >
+                <div className="text-6xl font-bold text-[#C1A36F] mb-4">{item.letter}</div>
+                <h3 className="text-xl font-bold mb-4">{item.word}</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="py-20 px-4 bg-gradient-to-t from-[#0A1F44] to-[#050505]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-serif mb-8 text-[#D4AF37]">
-            PRONTO PARA COMISSIONAR SUA PRÓXIMA JORNADA?
-          </h2>
-          <p className="text-xl text-gray-300 mb-12 leading-relaxed">
-            Preencha o briefing abaixo. Nossos arquitetos de viagem iniciarão o desenho da sua experiência.
-          </p>
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="btn-primary text-xl px-12 py-6 rounded-xl bg-[#D4AF37] hover:bg-[#C1A36F] transition-all duration-300 transform hover:scale-105 shadow-2xl text-black font-bold"
-          >
-            INICIAR CONSULTA AGORA
-          </button>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 bg-[#050505] border-t border-[#D4AF37]/20">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* QUEM SOMOS */}
+      <section className="py-24 bg-white text-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="text-4xl font-bold font-serif text-[#D4AF37] mb-4">NIALY</div>
-              <p className="text-gray-400">A Arquitetura da Jornada Executiva</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-[#D4AF37] mb-4">Contato</h3>
-              <div className="space-y-2 text-gray-400">
-                <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  <span>+55 (11) 99999-9999</span>
+              <h2 className="text-5xl font-bold mb-8 text-[#0A1F44]">
+                QUEM SOMOS
+              </h2>
+              <p className="text-xl leading-relaxed mb-6 text-gray-700">
+                Somos mais que uma agência de viagens. Somos arquitetos de experiências, 
+                curadores de momentos únicos e guardiões dos seus sonhos mais ambiciosos.
+              </p>
+              <p className="text-lg leading-relaxed mb-8 text-gray-600">
+                Com mais de 15 anos de experiência no mercado de luxo, nossa equipe é formada 
+                por especialistas apaixonados por criar jornadas que transcendem o comum. 
+                Cada membro da NIALY compartilha a mesma obsessão: transformar suas viagens 
+                em capítulos inesquecíveis da sua história de vida.
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center">
+                  <Check className="w-6 h-6 text-black" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  <span>contato@nialy.com.br</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>São Paulo, Brasil</span>
-                </div>
+                <span className="text-lg font-semibold text-[#0A1F44]">
+                  Certificados pelos principais órgãos internacionais de turismo
+                </span>
               </div>
             </div>
-            <div>
-              <h3 className="text-xl font-bold text-[#D4AF37] mb-4">Serviços</h3>
-              <div className="space-y-2 text-gray-400">
-                <p>Viagens Executivas</p>
-                <p>Experiências Exclusivas</p>
-                <p>Consultoria em Viagens</p>
-                <p>Atelier VIP</p>
+            
+            <div className="relative">
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=600&fit=crop&crop=faces"
+                  alt="Equipe NIALY"
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 bg-[#C1A36F] text-black p-6 rounded-xl shadow-xl">
+                <div className="text-3xl font-bold">15+</div>
+                <div className="text-sm font-semibold">Anos de Excelência</div>
               </div>
             </div>
           </div>
-          <div className="border-t border-[#D4AF37]/20 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 NIALY. Todos os direitos reservados.</p>
+        </div>
+      </section>
+
+      {/* PROVA SOCIAL - NÚMEROS */}
+      <section ref={statsRef} className="py-24 bg-[#0A1F44] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <h2 className="text-5xl font-bold text-center mb-20">
+            POR QUE MILHARES DE VIAJANTES ESCOLHERAM A NIALY?
+          </h2>
+          
+          <div className="grid md:grid-cols-4 gap-8 text-center">
+            {[
+              { number: counters.clientes, suffix: "+", label: "CLIENTES ATENDIDOS", description: "Viajantes que confiaram em nossa expertise" },
+              { number: counters.satisfacao, suffix: "%", label: "SATISFAÇÃO TOTAL", description: "Taxa de recomendação dos nossos clientes" },
+              { number: counters.destinos, suffix: "+", label: "DESTINOS EXCLUSIVOS", description: "Locais únicos em nosso portfólio" },
+              { number: counters.experiencia, suffix: " ANOS", label: "DE EXPERIÊNCIA", description: "Construindo sonhos e realizando jornadas" }
+            ].map((stat, index) => (
+              <div key={index} className="bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl p-8 border border-[rgba(193,163,111,0.2)]">
+                <div className="text-5xl font-bold text-[#C1A36F] mb-2">
+                  {stat.number.toLocaleString()}{stat.suffix}
+                </div>
+                <h3 className="text-xl font-bold mb-3">{stat.label}</h3>
+                <p className="text-gray-300 text-sm">{stat.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DEPOIMENTOS */}
+      <section className="py-24 bg-[#F4F6F9] text-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44]">
+            O QUE NOSSOS CLIENTES ESTÃO FALANDO DE NÓS
+          </h2>
+          
+          <div className="relative max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl p-12 shadow-2xl border border-gray-100">
+              <div className="flex items-center justify-center mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-6 h-6 text-[#C1A36F] fill-current" />
+                ))}
+              </div>
+              
+              <blockquote className="text-2xl leading-relaxed text-center mb-8 text-gray-700 italic">
+                "{testimonials[currentTestimonial].text}"
+              </blockquote>
+              
+              <div className="text-center">
+                <div className="font-bold text-xl text-[#0A1F44] mb-1">
+                  {testimonials[currentTestimonial].name}
+                </div>
+                <div className="text-gray-600 mb-4">
+                  {testimonials[currentTestimonial].role}
+                </div>
+                {testimonials[currentTestimonial].verified && (
+                  <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">
+                    <Check className="w-4 h-4" />
+                    Verificado pelo Google
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Indicadores */}
+            <div className="flex justify-center mt-8 gap-3">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentTestimonial ? 'bg-[#C1A36F] scale-125' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVIÇOS */}
+      <section className="py-24 bg-white text-black">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44]">
+            NOSSOS SERVIÇOS EXCLUSIVOS
+          </h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: "VIAGENS DE LUXO",
+                description: "Experiências premium com acomodações 5 estrelas e serviços personalizados.",
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
+              },
+              {
+                title: "JATOS PRIVADOS",
+                description: "Voe com total privacidade e conforto em nossa frota de aeronaves exclusivas.",
+                image: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=300&fit=crop"
+              },
+              {
+                title: "EXPERIÊNCIAS ÚNICAS",
+                description: "Acesso a eventos exclusivos e experiências que não estão disponíveis ao público.",
+                image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop"
+              },
+              {
+                title: "CONCIERGE 24H",
+                description: "Suporte completo durante toda sua jornada, disponível 24 horas por dia.",
+                image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=300&fit=crop"
+              }
+            ].map((service, index) => (
+              <div key={index} className="group cursor-pointer">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-6 shadow-xl">
+                  <img 
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-[#0A1F44] group-hover:text-[#C1A36F] transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FORMULÁRIO FINAL */}
+      <section className="py-24 bg-black relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#0A1F44] rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold mb-8">
+              PRONTO PARA SUA PRÓXIMA JORNADA?
+            </h2>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Deixe-nos criar a experiência de viagem dos seus sonhos. 
+              Preencha o formulário e nossa equipe entrará em contato em até 24 horas.
+            </p>
+          </div>
+          
+          <div className="bg-[rgba(10,31,68,0.8)] backdrop-blur-sm border border-[rgba(193,163,111,0.3)] rounded-2xl p-12">
+            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Nome Completo *</label>
+                <input
+                  type="text"
+                  name="nome"
+                  required
+                  value={formData.nome}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors"
+                  placeholder="Seu nome completo"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">E-mail *</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors"
+                  placeholder="seu@email.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Telefone *</label>
+                <input
+                  type="tel"
+                  name="telefone"
+                  required
+                  value={formData.telefone}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors"
+                  placeholder="(11) 99999-9999"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Destino de Interesse</label>
+                <select
+                  name="destino"
+                  value={formData.destino}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors"
+                >
+                  <option value="">Selecione um destino</option>
+                  <option value="europa">Europa</option>
+                  <option value="asia">Ásia</option>
+                  <option value="americas">Américas</option>
+                  <option value="africa">África</option>
+                  <option value="oceania">Oceania</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+              
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Orçamento Estimado</label>
+                <select
+                  name="orcamento"
+                  value={formData.orcamento}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors"
+                >
+                  <option value="">Selecione uma faixa</option>
+                  <option value="50k-100k">R$ 50.000 - R$ 100.000</option>
+                  <option value="100k-200k">R$ 100.000 - R$ 200.000</option>
+                  <option value="200k-500k">R$ 200.000 - R$ 500.000</option>
+                  <option value="500k+">Acima de R$ 500.000</option>
+                </select>
+              </div>
+              
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Conte-nos sobre seus sonhos de viagem</label>
+                <textarea
+                  name="mensagem"
+                  value={formData.mensagem}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none"
+                  placeholder="Descreva o que você imagina para sua próxima jornada..."
+                />
+              </div>
+              
+              <div className="md:col-span-2 text-center">
+                <button
+                  type="submit"
+                  className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50"
+                >
+                  INICIAR MINHA JORNADA DOS SONHOS
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* RODAPÉ */}
+      <footer className="bg-[#0A1F44] py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-4 gap-12">
+            <div className="md:col-span-2">
+              <div className="text-4xl font-bold text-[#C1A36F] mb-6">NIALY</div>
+              <p className="text-gray-300 leading-relaxed mb-6">
+                A arquitetura da jornada executiva. Transformamos viagens em legados 
+                através de um serviço de ultra-luxo e uma experiência incomparável.
+              </p>
+              <div className="flex gap-4">
+                <a href="https://instagram.com/nialy" className="w-10 h-10 bg-[#C1A36F] rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform">
+                  <Instagram className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-xl font-bold mb-6 text-[#C1A36F]">Contato</h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-[#C1A36F]" />
+                  <span className="text-gray-300">(11) 99999-9999</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-[#C1A36F]" />
+                  <span className="text-gray-300">contato@nialy.com.br</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-[#C1A36F]" />
+                  <span className="text-gray-300">São Paulo, SP</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-xl font-bold mb-6 text-[#C1A36F]">Links</h3>
+              <div className="space-y-3">
+                <a href="/cotacao" className="block text-gray-300 hover:text-[#C1A36F] transition-colors">
+                  Solicitar Cotação
+                </a>
+                <a href="/insiders" className="block text-gray-300 hover:text-[#C1A36F] transition-colors">
+                  Grupo VIP
+                </a>
+                <a href="#" className="block text-gray-300 hover:text-[#C1A36F] transition-colors">
+                  Política de Privacidade
+                </a>
+                <a href="#" className="block text-gray-300 hover:text-[#C1A36F] transition-colors">
+                  Termos de Uso
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-700 mt-12 pt-8 text-center">
+            <p className="text-gray-400">
+              © 2024 NIALY. Todos os direitos reservados. A arquitetura da jornada executiva.
+            </p>
           </div>
         </div>
       </footer>
 
-      {/* Modal de Consulta */}
+      {/* MODAL DE FORMULÁRIO */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0A1F44] border border-[#D4AF37]/30 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-[rgba(10,31,68,0.95)] backdrop-blur-sm border border-[rgba(193,163,111,0.3)] rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl font-bold font-serif text-[#D4AF37]">BRIEFING DE CONSULTA</h2>
+              <h3 className="text-3xl font-bold text-[#C1A36F]">INICIAR MEU PLANEJAMENTO</h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white text-2xl"
@@ -374,111 +657,91 @@ export default function Home() {
                 ×
               </button>
             </div>
-
+            
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-[#D4AF37] font-semibold mb-2">Nome Completo *</label>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Nome Completo *</label>
                   <input
                     type="text"
+                    name="nome"
                     required
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
+                    value={formData.nome}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors"
+                    placeholder="Seu nome completo"
                   />
                 </div>
+                
                 <div>
-                  <label className="block text-[#D4AF37] font-semibold mb-2">E-mail *</label>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">E-mail *</label>
                   <input
                     type="email"
+                    name="email"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors"
+                    placeholder="seu@email.com"
                   />
                 </div>
               </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-[#D4AF37] font-semibold mb-2">Telefone *</label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[#D4AF37] font-semibold mb-2">Destino Desejado</label>
-                  <input
-                    type="text"
-                    value={formData.destination}
-                    onChange={(e) => setFormData({...formData, destination: e.target.value})}
-                    className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-[#D4AF37] font-semibold mb-2">Orçamento Estimado</label>
-                  <select
-                    value={formData.budget}
-                    onChange={(e) => setFormData({...formData, budget: e.target.value})}
-                    className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
-                  >
-                    <option value="">Selecione</option>
-                    <option value="50k-100k">R$ 50.000 - R$ 100.000</option>
-                    <option value="100k-250k">R$ 100.000 - R$ 250.000</option>
-                    <option value="250k-500k">R$ 250.000 - R$ 500.000</option>
-                    <option value="500k+">R$ 500.000+</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[#D4AF37] font-semibold mb-2">Número de Viajantes</label>
-                  <input
-                    type="number"
-                    value={formData.travelers}
-                    onChange={(e) => setFormData({...formData, travelers: e.target.value})}
-                    className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
-                  />
-                </div>
-              </div>
-
+              
               <div>
-                <label className="block text-[#D4AF37] font-semibold mb-2">Datas Preferenciais</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Telefone *</label>
                 <input
-                  type="text"
-                  placeholder="Ex: Março 2024 ou Flexível"
-                  value={formData.dates}
-                  onChange={(e) => setFormData({...formData, dates: e.target.value})}
-                  className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none"
+                  type="tel"
+                  name="telefone"
+                  required
+                  value={formData.telefone}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors"
+                  placeholder="(11) 99999-9999"
                 />
               </div>
-
+              
               <div>
-                <label className="block text-[#D4AF37] font-semibold mb-2">Preferências e Objetivos da Viagem</label>
-                <textarea
-                  rows={4}
-                  placeholder="Descreva suas expectativas, interesses especiais, objetivos de negócio, etc."
-                  value={formData.preferences}
-                  onChange={(e) => setFormData({...formData, preferences: e.target.value})}
-                  className="w-full p-3 bg-white/5 border border-[#D4AF37]/30 rounded-lg text-white focus:border-[#D4AF37] focus:outline-none resize-none"
-                ></textarea>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Destino de Interesse</label>
+                <select
+                  name="destino"
+                  value={formData.destino}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors"
+                >
+                  <option value="">Selecione um destino</option>
+                  <option value="europa">Europa</option>
+                  <option value="asia">Ásia</option>
+                  <option value="americas">Américas</option>
+                  <option value="africa">África</option>
+                  <option value="oceania">Oceania</option>
+                  <option value="outro">Outro</option>
+                </select>
               </div>
-
-              <button
-                type="submit"
-                className="w-full btn-primary py-4 text-lg font-bold rounded-xl bg-[#D4AF37] hover:bg-[#C1A36F] transition-all duration-300 transform hover:scale-105 text-black"
-              >
-                ENVIAR BRIEFING
-              </button>
+              
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F]">Conte-nos sobre seus sonhos de viagem</label>
+                <textarea
+                  name="mensagem"
+                  value={formData.mensagem}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none"
+                  placeholder="Descreva o que você imagina para sua próxima jornada..."
+                />
+              </div>
+              
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50"
+                >
+                  ENVIAR SOLICITAÇÃO
+                </button>
+              </div>
             </form>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
