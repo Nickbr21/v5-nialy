@@ -2,13 +2,18 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'NIALY | Solicite Sua Cotação de Alta Performance',
-  description: 'Solicite uma cotação personalizada para sua próxima viagem de luxo. Consultoria especializada gratuita e proposta exclusiva em até 24 horas.',
-  keywords: 'cotação viagem luxo, orçamento viagem premium, consultoria viagens, planejamento viagem executiva',
-  robots: 'index, follow',
+  description: 'Solicite sua cotação personalizada para viagens de luxo. Receba uma proposta exclusiva em até 24 horas com a NIALY.',
+  keywords: 'cotação viagem luxo, orçamento viagem premium, solicitar cotação NIALY',
   openGraph: {
     title: 'NIALY | Solicite Sua Cotação de Alta Performance',
-    description: 'Solicite uma cotação personalizada para sua próxima viagem de luxo. Consultoria especializada gratuita e proposta exclusiva em até 24 horas.',
+    description: 'Solicite sua cotação personalizada para viagens de luxo. Receba uma proposta exclusiva em até 24 horas com a NIALY.',
     type: 'website',
+    locale: 'pt_BR',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NIALY | Solicite Sua Cotação de Alta Performance',
+    description: 'Solicite sua cotação personalizada para viagens de luxo. Receba uma proposta exclusiva em até 24 horas com a NIALY.',
   },
 }
 

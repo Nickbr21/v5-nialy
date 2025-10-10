@@ -1,271 +1,246 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Star, MapPin, Calendar, Users, Plane, ArrowRight } from 'lucide-react'
+import { 
+  Crown, 
+  MessageCircle, 
+  Clock, 
+  Award,
+  Phone,
+  Mail,
+  Instagram,
+  Zap,
+  Gift,
+  Star,
+  CheckCircle
+} from 'lucide-react'
 
-export default function BemVindoInsiders() {
+export default function BemVindoInsidersPage() {
   const [countdown, setCountdown] = useState(10)
+  const [nomeUsuario, setNomeUsuario] = useState('Insider')
 
   useEffect(() => {
     // Countdown para redirecionamento automático
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          // Redirecionar para o grupo WhatsApp
-          window.location.href = "https://wa.me/5511999999999?text=Olá! Vim através do NIALY Insiders e gostaria de conhecer as ofertas exclusivas!"
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    } else {
+      // Redirecionar para WhatsApp após 10 segundos
+      window.location.href = 'https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de acessar as ofertas exclusivas.'
+    }
+  }, [countdown])
 
-    return () => clearInterval(timer)
-  }, [])
+  const handleWhatsAppClick = () => {
+    window.location.href = 'https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de acessar as ofertas exclusivas.'
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A1F44] via-[#1a2f5a] to-[#0A1F44] relative overflow-hidden">
-      {/* Efeito de partículas de fundo */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-[#C1A36F] rounded-full opacity-30 animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${4 + Math.random() * 3}s`
-            }}
-          ></div>
-        ))}
-      </div>
-
-      <div className="relative z-10 py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Header de boas-vindas */}
-          <div className="text-center mb-16">
-            <h1 className="font-playfair text-4xl md:text-6xl font-bold text-white mb-6 uppercase">
-              SEJA BEM-VINDO AO NIALY INSIDERS
-            </h1>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto font-montserrat font-light leading-relaxed mb-8">
-              Você agora tem acesso exclusivo às melhores oportunidades de viagem do mercado. 
-              Confira algumas das ofertas que nossos membros VIP estão aproveitando neste momento.
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Fundo gradiente luxuoso */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A1F44] via-[#1a3a6b] to-[#2a4a7b]"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+      
+      {/* Conteúdo principal */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Badge de boas-vindas */}
+          <div className="inline-flex items-center bg-[#C1A36F] text-white px-8 py-3 rounded-full mb-8 shadow-lg">
+            <Crown className="w-6 h-6 mr-3" />
+            <span className="font-bold text-lg">BEM-VINDO AO CLUBE EXCLUSIVO</span>
+          </div>
+          
+          {/* Título principal */}
+          <h1 className="font-playfair text-5xl md:text-6xl font-bold text-white mb-6">
+            SEJA BEM-VINDO AO
+            <span className="block text-[#C1A36F] mt-2">NIALY INSIDERS</span>
+          </h1>
+          
+          {/* Mensagem de boas-vindas */}
+          <div className="text-xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
+            <p className="mb-4">
+              Parabéns, <span className="text-[#C1A36F] font-bold">{nomeUsuario}</span>! 
+              Você agora faz parte de um grupo seleto de viajantes.
             </p>
-            
-            {/* Contador de redirecionamento */}
-            <div className="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-[#C1A36F]/30">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-white font-montserrat">
-                Redirecionamento automático em <span className="font-bold text-[#C1A36F]">{countdown}s</span>
-              </span>
-            </div>
+            <p className="mb-4">
+              Prepare-se para ter acesso a ofertas exclusivas, experiências únicas 
+              e descontos de até 70% que não estão disponíveis para o público geral.
+            </p>
           </div>
 
           {/* Seção de ofertas exclusivas */}
-          <div className="mb-16">
-            <h2 className="font-playfair text-3xl font-bold text-white text-center mb-12 uppercase">
-              Ofertas Exclusivas Disponíveis Agora
+          <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-3xl p-8 mb-12">
+            <h2 className="font-playfair text-3xl font-bold text-white mb-8">
+              Suas Ofertas Exclusivas Aguardam
             </h2>
             
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Oferta 1: Miami */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-[#C1A36F]/30 transform hover:scale-105 transition-all duration-300">
-                <div className="relative h-64">
-                  <img 
-                    src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" 
-                    alt="Miami Beach - Vista aérea deslumbrante" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    LIMITADO
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {/* Miami */}
+              <div className="bg-white bg-opacity-20 rounded-2xl p-6 backdrop-blur-sm">
+                <div className="h-32 bg-gradient-to-br from-pink-400 to-orange-500 rounded-xl mb-4"></div>
+                <h3 className="font-bold text-xl text-white mb-2">MIAMI, EUA</h3>
+                <p className="text-gray-300 text-sm mb-3">Passagens Aéreas (Round Trip)</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Economy a partir de</span>
+                    <span className="text-lg font-bold text-[#C1A36F]">R$ 2.590</span>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                    <div className="flex items-center text-white mb-2">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <span className="font-montserrat font-medium">Miami, EUA</span>
-                    </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Executiva a partir de</span>
+                    <span className="text-lg font-bold text-[#C1A36F]">R$ 10.999</span>
                   </div>
                 </div>
-                
-                <div className="p-6">
-                  <h3 className="font-playfair text-2xl font-bold text-white mb-4">MIAMI, EUA</h3>
-                  <p className="text-gray-300 font-montserrat font-light mb-4">
-                    Passagens Aéreas (Round Trip)
-                  </p>
-                  
-                  <div className="space-y-2 mb-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400 font-montserrat">Economy</span>
-                      <span className="text-[#C1A36F] font-bold text-lg">a partir de R$ 2.590</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400 font-montserrat">Executiva</span>
-                      <span className="text-[#C1A36F] font-bold text-lg">a partir de R$ 10.999</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center text-yellow-400 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                    <span className="ml-2 text-gray-300 text-sm font-montserrat">Destino Premium</span>
-                  </div>
+                <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold inline-block">
+                  OFERTA LIMITADA
                 </div>
               </div>
 
-              {/* Oferta 2: Lisboa */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-[#C1A36F]/30 transform hover:scale-105 transition-all duration-300">
-                <div className="relative h-64">
-                  <img 
-                    src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600&h=400&fit=crop" 
-                    alt="Lisboa - Vista panorâmica da cidade histórica" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    POPULAR
+              {/* Lisboa */}
+              <div className="bg-white bg-opacity-20 rounded-2xl p-6 backdrop-blur-sm">
+                <div className="h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl mb-4"></div>
+                <h3 className="font-bold text-xl text-white mb-2">LISBOA, PORTUGAL</h3>
+                <p className="text-gray-300 text-sm mb-3">Pacote 5 Noites (Aéreo + Hotel 4 Estrelas)</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">A partir de</span>
+                    <span className="text-lg font-bold text-[#C1A36F]">R$ 4.850</span>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                    <div className="flex items-center text-white mb-2">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <span className="font-montserrat font-medium">Lisboa, Portugal</span>
-                    </div>
+                  <div className="text-center">
+                    <span className="text-gray-300 text-sm">por pessoa</span>
                   </div>
                 </div>
-                
-                <div className="p-6">
-                  <h3 className="font-playfair text-2xl font-bold text-white mb-4">LISBOA, PORTUGAL</h3>
-                  <p className="text-gray-300 font-montserrat font-light mb-4">
-                    Pacote 5 Noites (Aéreo + Hotel 4 Estrelas)
-                  </p>
-                  
-                  <div className="space-y-2 mb-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400 font-montserrat">Por pessoa</span>
-                      <span className="text-[#C1A36F] font-bold text-xl">A partir de R$ 4.850</span>
-                    </div>
-                    <div className="text-gray-400 text-sm font-montserrat">
-                      Inclui: Voo + Hotel + Café da manhã
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center text-yellow-400 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                    <span className="ml-2 text-gray-300 text-sm font-montserrat">Pacote Completo</span>
-                  </div>
+                <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold inline-block">
+                  PACOTE COMPLETO
                 </div>
               </div>
 
-              {/* Oferta 3: Cancún */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-[#C1A36F]/30 transform hover:scale-105 transition-all duration-300">
-                <div className="relative h-64">
-                  <img 
-                    src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop" 
-                    alt="Cancún - Resort de luxo com praia paradisíaca" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    40% OFF
+              {/* Cancún */}
+              <div className="bg-white bg-opacity-20 rounded-2xl p-6 backdrop-blur-sm">
+                <div className="h-32 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl mb-4"></div>
+                <h3 className="font-bold text-xl text-white mb-2">CANCÚN, MÉXICO</h3>
+                <p className="text-gray-300 text-sm mb-3">Resort All-Inclusive (Diária para Casal)</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">A partir de</span>
+                    <span className="text-lg font-bold text-[#C1A36F]">R$ 1.200</span>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                    <div className="flex items-center text-white mb-2">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      <span className="font-montserrat font-medium">Cancún, México</span>
-                    </div>
+                  <div className="text-center">
+                    <span className="text-red-400 font-bold">com até 40% OFF</span>
                   </div>
                 </div>
-                
-                <div className="p-6">
-                  <h3 className="font-playfair text-2xl font-bold text-white mb-4">CANCÚN, MÉXICO</h3>
-                  <p className="text-gray-300 font-montserrat font-light mb-4">
-                    Resort All-Inclusive (Diária para Casal)
-                  </p>
-                  
-                  <div className="space-y-2 mb-6">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400 font-montserrat">Diária casal</span>
-                      <span className="text-[#C1A36F] font-bold text-xl">A partir de R$ 1.200</span>
-                    </div>
-                    <div className="text-orange-400 text-sm font-montserrat font-bold">
-                      com até 40% OFF - Oferta limitada!
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center text-yellow-400 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                    <span className="ml-2 text-gray-300 text-sm font-montserrat">All-Inclusive</span>
-                  </div>
+                <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold inline-block">
+                  ALL-INCLUSIVE
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Call to Action Principal */}
-          <div className="text-center mb-12">
-            <div 
-              className="inline-block p-8 rounded-2xl shadow-2xl max-w-2xl"
-              style={{
-                background: 'rgba(10, 31, 68, 0.8)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(193, 163, 111, 0.3)'
-              }}
+          {/* Benefícios do Insider */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="text-center">
+              <Zap className="w-16 h-16 text-[#C1A36F] mx-auto mb-4" />
+              <h3 className="font-bold text-xl text-white mb-2">Ofertas Relâmpago</h3>
+              <p className="text-gray-300">Primeiro acesso a promoções exclusivas</p>
+            </div>
+            
+            <div className="text-center">
+              <Gift className="w-16 h-16 text-[#C1A36F] mx-auto mb-4" />
+              <h3 className="font-bold text-xl text-white mb-2">Upgrades Gratuitos</h3>
+              <p className="text-gray-300">Melhorias automáticas sem custo</p>
+            </div>
+            
+            <div className="text-center">
+              <Star className="w-16 h-16 text-[#C1A36F] mx-auto mb-4" />
+              <h3 className="font-bold text-xl text-white mb-2">Experiências VIP</h3>
+              <p className="text-gray-300">Acesso a vivências exclusivas</p>
+            </div>
+          </div>
+
+          {/* Botão principal e countdown */}
+          <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 mb-8">
+            <h3 className="font-bold text-2xl text-white mb-4">
+              Acesse o Grupo WhatsApp Exclusivo
+            </h3>
+            <p className="text-gray-300 mb-6">
+              Todas as ofertas e oportunidades são compartilhadas primeiro no nosso grupo privado
+            </p>
+            
+            <button 
+              onClick={handleWhatsAppClick}
+              className="bg-[#C1A36F] hover:bg-[#A8925F] text-white font-bold py-4 px-8 rounded-2xl text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl mb-6 inline-flex items-center"
             >
-              <h3 className="font-playfair text-3xl font-bold text-white mb-6 uppercase">
-                Acesso Exclusivo Liberado
-              </h3>
-              <p className="text-gray-300 font-montserrat font-light mb-8 leading-relaxed">
-                Estas são apenas algumas das oportunidades disponíveis para nossos membros VIP. 
-                No grupo, você terá acesso a ofertas ainda mais exclusivas, com descontos de até 60% 
-                e experiências que não encontrará em nenhum outro lugar.
-              </p>
-              
-              <a 
-                href="https://wa.me/5511999999999?text=Olá! Vim através do NIALY Insiders e gostaria de conhecer as ofertas exclusivas!"
-                className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#C1A36F] to-[#A8925F] hover:from-[#A8925F] hover:to-[#8B7A4F] text-white font-bold py-6 px-12 rounded-2xl text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl"
-              >
-                <span className="font-playfair uppercase">CLIQUE AQUI PARA ENTRAR NO GRUPO WHATSAPP</span>
-                <ArrowRight className="w-6 h-6" />
-              </a>
+              <MessageCircle className="w-6 h-6 mr-3" />
+              CLIQUE AQUI PARA ENTRAR NO GRUPO WHATSAPP
+            </button>
+            
+            {/* Countdown */}
+            <div className="bg-[#C1A36F] text-white px-6 py-3 rounded-full inline-block">
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                <span className="font-bold">
+                  Redirecionamento automático em: {countdown}s
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Benefícios do grupo */}
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="p-6">
-              <div className="w-16 h-16 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Plane className="w-8 h-8 text-white" />
-              </div>
-              <h4 className="font-playfair text-xl font-bold text-white mb-3 uppercase">Ofertas Diárias</h4>
-              <p className="text-gray-300 font-montserrat font-light">
-                Receba ofertas exclusivas todos os dias, com descontos de até 60% em destinos premium.
-              </p>
+          {/* Garantias */}
+          <div className="flex flex-wrap justify-center gap-8 text-gray-300 mb-8">
+            <div className="flex items-center">
+              <CheckCircle className="w-5 h-5 mr-2 text-[#C1A36F]" />
+              <span>Acesso gratuito</span>
             </div>
-            
-            <div className="p-6">
-              <div className="w-16 h-16 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
-              </div>
-              <h4 className="font-playfair text-xl font-bold text-white mb-3 uppercase">Comunidade VIP</h4>
-              <p className="text-gray-300 font-montserrat font-light">
-                Conecte-se com outros viajantes de alto padrão e compartilhe experiências únicas.
-              </p>
+            <div className="flex items-center">
+              <CheckCircle className="w-5 h-5 mr-2 text-[#C1A36F]" />
+              <span>Ofertas exclusivas</span>
             </div>
-            
-            <div className="p-6">
-              <div className="w-16 h-16 bg-[#C1A36F] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-8 h-8 text-white" />
-              </div>
-              <h4 className="font-playfair text-xl font-bold text-white mb-3 uppercase">Acesso Antecipado</h4>
-              <p className="text-gray-300 font-montserrat font-light">
-                Seja o primeiro a saber sobre promoções relâmpago e oportunidades limitadas.
-              </p>
+            <div className="flex items-center">
+              <CheckCircle className="w-5 h-5 mr-2 text-[#C1A36F]" />
+              <span>Suporte personalizado</span>
+            </div>
+          </div>
+
+          {/* Informações de contato */}
+          <div className="text-center">
+            <p className="text-gray-300 mb-4">Dúvidas? Entre em contato conosco:</p>
+            <div className="flex flex-wrap justify-center gap-6 text-gray-300">
+              <a href="tel:+5511999999999" className="flex items-center hover:text-[#C1A36F] transition-colors">
+                <Phone className="w-4 h-4 mr-2" />
+                (11) 99999-9999
+              </a>
+              <a href="mailto:contato@nialy.com.br" className="flex items-center hover:text-[#C1A36F] transition-colors">
+                <Mail className="w-4 h-4 mr-2" />
+                contato@nialy.com.br
+              </a>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Logo N de fundo */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-5">
+        <div className="font-playfair text-[20rem] font-bold text-white">N</div>
+      </div>
+      
+      {/* Rodapé minimalista */}
+      <footer className="absolute bottom-0 left-0 right-0 z-10 py-6 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row justify-between items-center text-gray-400 text-sm">
+            <div className="flex items-center mb-4 sm:mb-0">
+              <h3 className="font-playfair text-2xl font-bold text-[#C1A36F] mr-6">NIALY</h3>
+              <span>&copy; 2025 NIALY. Todos os direitos reservados.</span>
+            </div>
+            
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-[#C1A36F] transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-[#C1A36F] transition-colors">
+                <MessageCircle className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

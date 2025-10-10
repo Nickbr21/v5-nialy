@@ -14,6 +14,7 @@ import {
   MapPin,
   Instagram,
   MessageCircle,
+  ArrowLeft,
   Zap,
   Crown,
   Gift
@@ -69,59 +70,43 @@ export default function InsidersPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section com Vídeo de Fundo e Timer */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Vídeo cinematográfico simulado */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
-          <div className="absolute inset-0 bg-black bg-opacity-60"></div>
-          
-          {/* Partículas douradas animadas */}
-          <div className="absolute inset-0">
-            {[...Array(25)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-2 h-2 bg-[#C1A36F] rounded-full opacity-40 animate-pulse"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${3 + Math.random() * 2}s`
-                }}
-              ></div>
-            ))}
-          </div>
+    <div className="min-h-screen bg-white">
+      {/* Header com navegação */}
+      <header className="bg-white shadow-sm py-4 px-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <a href="/" className="flex items-center text-[#0A1F44] hover:text-[#C1A36F] transition-colors">
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Voltar ao início
+          </a>
+          <h1 className="font-playfair text-3xl font-bold text-[#C1A36F]">NIALY</h1>
         </div>
+      </header>
 
-        <div className="relative z-10 text-center text-white px-4 max-w-5xl">
-          <div className="inline-flex items-center bg-[#C1A36F] text-white px-6 py-3 rounded-full mb-8 shadow-2xl">
-            <Crown className="w-6 h-6 mr-3" />
-            <span className="font-bold text-lg font-playfair uppercase">ACESSO EXCLUSIVO</span>
+      {/* Hero Section com Timer */}
+      <section className="relative py-20 px-4 bg-gradient-to-br from-[#0A1F44] to-[#1a3a6b] text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center bg-[#C1A36F] text-white px-6 py-2 rounded-full mb-6">
+            <Crown className="w-5 h-5 mr-2" />
+            <span className="font-bold">ACESSO EXCLUSIVO</span>
           </div>
           
-          <h1 className="font-playfair mb-8">
-            <span className="block text-3xl md:text-5xl font-light mb-4 tracking-wider">NIALY</span>
-            <span className="block text-6xl md:text-9xl font-bold text-[#C1A36F] drop-shadow-2xl" style={{ textShadow: '0 0 30px rgba(193, 163, 111, 0.5)' }}>
-              Insiders
-            </span>
+          <h1 className="title-hero mb-6">
+            <span className="block font-light">NIALY</span>
+            <span className="block font-bold text-[#C1A36F]">Insiders</span>
           </h1>
           
-          <p className="text-xl md:text-2xl font-montserrat font-light mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
             Acesso a oportunidades exclusivas de viagens com descontos de até 70% 
             e experiências que não estão disponíveis ao público geral.
           </p>
 
-          {/* Timer de 5 minutos */}
-          <div className="bg-red-600 text-white px-8 py-6 rounded-2xl inline-block mb-12 shadow-2xl border-2 border-red-400">
+          {/* Timer */}
+          <div className="bg-red-600 text-white px-8 py-4 rounded-2xl inline-block mb-8">
             <div className="flex items-center justify-center">
-              <Clock className="w-8 h-8 mr-4 animate-pulse" />
-              <div className="text-center">
-                <div className="text-sm font-montserrat uppercase tracking-wider mb-1">Oferta Expira Em</div>
-                <div className="text-4xl font-bold font-playfair">
-                  {formatTime(timeLeft)}
-                </div>
-              </div>
+              <Clock className="w-6 h-6 mr-3" />
+              <span className="text-2xl font-bold">
+                Oferta expira em: {formatTime(timeLeft)}
+              </span>
             </div>
           </div>
         </div>
@@ -131,67 +116,28 @@ export default function InsidersPage() {
       <section className="py-20 px-4 bg-[#F4F6F9]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">Benefícios Exclusivos</h2>
-            <p className="text-xl text-gray-600 font-montserrat font-light leading-relaxed">O que você ganha sendo um NIALY Insider</p>
+            <h2 className="title-section text-[#0A1F44] mb-6">Benefícios Exclusivos</h2>
+            <p className="text-xl text-gray-600">O que você ganha sendo um NIALY Insider</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
-              <Zap className="w-20 h-20 text-[#C1A36F] mx-auto mb-6" strokeWidth={1.5} />
-              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Ofertas Relâmpago</h3>
-              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
-                Seja o primeiro a saber sobre promoções exclusivas com descontos de até 70%.
-              </p>
+            <div className="card-luxury p-8 text-center">
+              <Zap className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" />
+              <h3 className="font-bold text-xl text-[#0A1F44] mb-4">Ofertas Relâmpago</h3>
+              <p className="text-gray-600">Seja o primeiro a saber sobre promoções exclusivas com descontos de até 70%.</p>
             </div>
             
-            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
-              <Crown className="w-20 h-20 text-[#C1A36F] mx-auto mb-6" strokeWidth={1.5} />
-              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Experiências VIP</h3>
-              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
-                Acesso a experiências exclusivas não disponíveis para o público geral.
-              </p>
+            <div className="card-luxury p-8 text-center">
+              <Crown className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" />
+              <h3 className="font-bold text-xl text-[#0A1F44] mb-4">Experiências VIP</h3>
+              <p className="text-gray-600">Acesso a experiências exclusivas não disponíveis para o público geral.</p>
             </div>
             
-            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] text-center transform hover:scale-105 transition-all duration-300">
-              <Gift className="w-20 h-20 text-[#C1A36F] mx-auto mb-6" strokeWidth={1.5} />
-              <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Upgrades Gratuitos</h3>
-              <p className="text-gray-600 font-montserrat font-light leading-relaxed">
-                Upgrades automáticos em hotéis, voos e experiências sem custo adicional.
-              </p>
+            <div className="card-luxury p-8 text-center">
+              <Gift className="w-16 h-16 text-[#C1A36F] mx-auto mb-6" />
+              <h3 className="font-bold text-xl text-[#0A1F44] mb-4">Upgrades Gratuitos</h3>
+              <p className="text-gray-600">Upgrades automáticos em hotéis, voos e experiências sem custo adicional.</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Seção de Escassez - Posicionada logo após os benefícios */}
-      <section className="py-20 px-4 bg-red-600 text-white relative overflow-hidden">
-        {/* Efeito de urgência com partículas */}
-        <div className="absolute inset-0">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-white rounded-full opacity-30 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${2 + Math.random() * 1}s`
-              }}
-            ></div>
-          ))}
-        </div>
-        
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="font-playfair text-4xl md:text-6xl font-bold mb-8 uppercase">
-            ⚠️ ATENÇÃO: VAGAS LIMITADAS
-          </h2>
-          <p className="text-xl md:text-2xl font-montserrat font-light mb-8 leading-relaxed">
-            Apenas <span className="font-bold text-yellow-300">47 vagas restantes</span> para novos membros este mês. 
-            Após atingirmos o limite, as inscrições serão fechadas até o próximo trimestre.
-          </p>
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 inline-block">
-            <div className="text-3xl font-bold mb-2">⏰ {formatTime(timeLeft)}</div>
-            <div className="text-lg font-montserrat">para garantir sua vaga</div>
           </div>
         </div>
       </section>
@@ -200,89 +146,71 @@ export default function InsidersPage() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">Ofertas Exclusivas Disponíveis Agora</h2>
-            <p className="text-xl text-gray-600 font-montserrat font-light leading-relaxed">Oportunidades limitadas para membros Insiders</p>
+            <h2 className="title-section text-[#0A1F44] mb-6">Ofertas Exclusivas Disponíveis Agora</h2>
+            <p className="text-xl text-gray-600">Oportunidades limitadas para membros Insiders</p>
           </div>
           
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {/* Miami */}
-            <div className="bg-white rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] overflow-hidden transform hover:scale-105 transition-all duration-300">
-              <div className="relative h-64">
-                <img 
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" 
-                  alt="Miami Beach - Vista aérea deslumbrante" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
-                  -60% OFF
+            <div className="card-luxury overflow-hidden">
+              <div className="h-48 bg-gradient-to-br from-pink-400 to-orange-500"></div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-xl text-[#0A1F44]">Miami Beach</h3>
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">-60%</span>
                 </div>
-              </div>
-              <div className="p-8">
-                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Miami Beach</h3>
-                <p className="text-gray-600 font-montserrat font-light mb-6 leading-relaxed">
+                <p className="text-gray-600 mb-4">
                   5 dias em resort 5 estrelas com vista para o mar, transfers inclusos e experiências VIP.
                 </p>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-gray-500 line-through text-lg">R$ 15.000</span>
-                    <span className="text-3xl font-bold text-[#C1A36F] ml-3 font-playfair">R$ 6.000</span>
+                    <span className="text-gray-500 line-through">R$ 15.000</span>
+                    <span className="text-2xl font-bold text-[#C1A36F] ml-2">R$ 6.000</span>
                   </div>
+                  <span className="text-sm text-gray-500">5 vagas restantes</span>
                 </div>
-                <div className="text-red-600 font-bold text-sm">⚡ Apenas 5 vagas restantes</div>
               </div>
             </div>
 
             {/* Lisboa */}
-            <div className="bg-white rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] overflow-hidden transform hover:scale-105 transition-all duration-300">
-              <div className="relative h-64">
-                <img 
-                  src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600&h=400&fit=crop" 
-                  alt="Lisboa - Vista panorâmica da cidade histórica" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
-                  -70% OFF
+            <div className="card-luxury overflow-hidden">
+              <div className="h-48 bg-gradient-to-br from-blue-400 to-purple-500"></div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-xl text-[#0A1F44]">Lisboa Histórica</h3>
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">-70%</span>
                 </div>
-              </div>
-              <div className="p-8">
-                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Lisboa Histórica</h3>
-                <p className="text-gray-600 font-montserrat font-light mb-6 leading-relaxed">
+                <p className="text-gray-600 mb-4">
                   7 dias explorando Portugal com guia exclusivo, degustações e hospedagem boutique.
                 </p>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-gray-500 line-through text-lg">R$ 20.000</span>
-                    <span className="text-3xl font-bold text-[#C1A36F] ml-3 font-playfair">R$ 6.000</span>
+                    <span className="text-gray-500 line-through">R$ 20.000</span>
+                    <span className="text-2xl font-bold text-[#C1A36F] ml-2">R$ 6.000</span>
                   </div>
+                  <span className="text-sm text-gray-500">3 vagas restantes</span>
                 </div>
-                <div className="text-red-600 font-bold text-sm">⚡ Apenas 3 vagas restantes</div>
               </div>
             </div>
 
             {/* Cancún */}
-            <div className="bg-white rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] overflow-hidden transform hover:scale-105 transition-all duration-300">
-              <div className="relative h-64">
-                <img 
-                  src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop" 
-                  alt="Cancún - Resort de luxo com praia paradisíaca" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
-                  -55% OFF
+            <div className="card-luxury overflow-hidden">
+              <div className="h-48 bg-gradient-to-br from-green-400 to-blue-500"></div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-xl text-[#0A1F44]">Cancún Premium</h3>
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">-55%</span>
                 </div>
-              </div>
-              <div className="p-8">
-                <h3 className="font-playfair text-2xl font-bold text-[#0A1F44] mb-4 uppercase">Cancún Premium</h3>
-                <p className="text-gray-600 font-montserrat font-light mb-6 leading-relaxed">
+                <p className="text-gray-600 mb-4">
                   6 dias em resort all-inclusive de luxo com acesso a cenotes privados e experiências maias.
                 </p>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-gray-500 line-through text-lg">R$ 18.000</span>
-                    <span className="text-3xl font-bold text-[#C1A36F] ml-3 font-playfair">R$ 8.100</span>
+                    <span className="text-gray-500 line-through">R$ 18.000</span>
+                    <span className="text-2xl font-bold text-[#C1A36F] ml-2">R$ 8.100</span>
                   </div>
+                  <span className="text-sm text-gray-500">7 vagas restantes</span>
                 </div>
-                <div className="text-red-600 font-bold text-sm">⚡ Apenas 7 vagas restantes</div>
               </div>
             </div>
           </div>
@@ -290,42 +218,19 @@ export default function InsidersPage() {
       </section>
 
       {/* Formulário de Inscrição */}
-      <section className="py-20 px-4 bg-[#0A1F44] relative overflow-hidden">
-        {/* Efeito de partículas douradas */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-[#C1A36F] rounded-full opacity-30 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 4}s`,
-                animationDuration: `${3 + Math.random() * 2}s`
-              }}
-            ></div>
-          ))}
-        </div>
-        
-        <div className="max-w-4xl mx-auto relative z-10">
+      <section className="py-20 px-4 section-navy">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-white mb-6 uppercase">Garanta Seu Acesso Agora</h2>
-            <p className="text-xl text-gray-300 font-montserrat font-light leading-relaxed">
+            <h2 className="title-section text-white mb-6">Garante Seu Acesso Agora</h2>
+            <p className="text-xl text-gray-300">
               Preencha os dados abaixo e receba acesso imediato ao grupo exclusivo
             </p>
           </div>
           
-          <div 
-            className="p-10 rounded-2xl shadow-2xl max-w-2xl mx-auto"
-            style={{
-              background: 'rgba(10, 31, 68, 0.8)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(193, 163, 111, 0.3)'
-            }}
-          >
+          <div className="card-luxury p-8 max-w-2xl mx-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2 font-montserrat">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Nome Completo *
                 </label>
                 <input
@@ -333,13 +238,13 @@ export default function InsidersPage() {
                   name="nome"
                   value={formData.nome}
                   onChange={handleInputChange}
-                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#C1A36F]"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2 font-montserrat">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Seu Melhor E-mail *
                 </label>
                 <input
@@ -347,13 +252,13 @@ export default function InsidersPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#C1A36F]"
                   required
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2 font-montserrat">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   WhatsApp com DDD *
                 </label>
                 <input
@@ -361,20 +266,17 @@ export default function InsidersPage() {
                   name="telefone"
                   value={formData.telefone}
                   onChange={handleInputChange}
-                  className="w-full p-4 border border-gray-600 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-gray-300 focus:outline-none focus:border-[#C1A36F] focus:ring-2 focus:ring-[#C1A36F]/50 transition-all duration-300"
+                  className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-[#C1A36F]"
                   placeholder="(11) 99999-9999"
                   required
                 />
               </div>
               
-              <button 
-                type="submit" 
-                className="bg-gradient-to-r from-[#C1A36F] to-[#A8925F] hover:from-[#A8925F] hover:to-[#8B7A4F] text-white font-bold py-6 px-12 rounded-xl w-full text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl font-playfair uppercase"
-              >
+              <button type="submit" className="btn-primary w-full text-lg py-4">
                 QUERO SER UM NIALY INSIDER
               </button>
               
-              <p className="text-center text-sm text-gray-400 font-montserrat">
+              <p className="text-center text-sm text-gray-600">
                 Ao se inscrever, você concorda em receber ofertas exclusivas via WhatsApp e e-mail.
               </p>
             </form>
@@ -386,52 +288,52 @@ export default function InsidersPage() {
       <section className="py-20 px-4 bg-[#F4F6F9]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#0A1F44] mb-6 uppercase">O Que Dizem Nossos Insiders</h2>
+            <h2 className="title-section text-[#0A1F44] mb-6">O Que Dizem Nossos Insiders</h2>
           </div>
           
           <div className="grid md:grid-cols-2 gap-12">
-            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] transform hover:scale-105 transition-all duration-300">
+            <div className="card-luxury p-8">
               <div className="flex items-center mb-6">
                 <div className="flex text-[#C1A36F]">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-6 h-6 fill-current" />
+                    <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
               </div>
-              <p className="text-gray-700 text-lg mb-8 italic leading-relaxed font-montserrat font-light">
+              <p className="text-gray-700 text-lg mb-6 italic">
                 "Ser um Insider da NIALY mudou completamente como eu viajo. As ofertas são 
                 incríveis e o atendimento é sempre impecável."
               </p>
               <div className="flex items-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                <div className="w-12 h-12 bg-[#C1A36F] rounded-full flex items-center justify-center text-white font-bold">
                   AF
                 </div>
-                <div className="ml-6">
-                  <h4 className="font-bold text-[#0A1F44] text-lg font-playfair">Ana Fernandes</h4>
-                  <p className="text-gray-600 font-montserrat">Insider há 2 anos</p>
+                <div className="ml-4">
+                  <h4 className="font-bold text-[#0A1F44]">Ana Fernandes</h4>
+                  <p className="text-gray-600">Insider há 2 anos</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white p-10 rounded-2xl shadow-[0px_15px_40px_rgba(0,0,0,0.1)] transform hover:scale-105 transition-all duration-300">
+            <div className="card-luxury p-8">
               <div className="flex items-center mb-6">
                 <div className="flex text-[#C1A36F]">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-6 h-6 fill-current" />
+                    <Star key={i} className="w-5 h-5 fill-current" />
                   ))}
                 </div>
               </div>
-              <p className="text-gray-700 text-lg mb-8 italic leading-relaxed font-montserrat font-light">
+              <p className="text-gray-700 text-lg mb-6 italic">
                 "Já economizei mais de R$ 50.000 em viagens sendo Insider. 
                 As experiências exclusivas não têm preço!"
               </p>
               <div className="flex items-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#A8925F] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                <div className="w-12 h-12 bg-[#C1A36F] rounded-full flex items-center justify-center text-white font-bold">
                   PS
                 </div>
-                <div className="ml-6">
-                  <h4 className="font-bold text-[#0A1F44] text-lg font-playfair">Paulo Santos</h4>
-                  <p className="text-gray-600 font-montserrat">Insider há 3 anos</p>
+                <div className="ml-4">
+                  <h4 className="font-bold text-[#0A1F44]">Paulo Santos</h4>
+                  <p className="text-gray-600">Insider há 3 anos</p>
                 </div>
               </div>
             </div>
@@ -440,58 +342,58 @@ export default function InsidersPage() {
       </section>
 
       {/* Rodapé */}
-      <footer className="bg-[#0A1F44] py-16 px-4 border-t border-gray-700">
+      <footer className="section-navy py-12 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-playfair text-4xl font-bold text-[#C1A36F] mb-6">NIALY</h3>
-              <p className="text-gray-300 mb-6 font-montserrat font-light leading-relaxed">
+              <h3 className="font-playfair text-3xl font-bold text-[#C1A36F] mb-4">NIALY</h3>
+              <p className="text-gray-300 mb-4">
                 A arquitetura da jornada executiva. Transformamos viagens em legados.
               </p>
             </div>
             
             <div>
-              <h4 className="font-playfair font-bold text-white mb-6 text-xl uppercase">Links Rápidos</h4>
-              <ul className="space-y-3 text-gray-300">
-                <li><a href="/" className="hover:text-[#C1A36F] transition-colors font-montserrat">Início</a></li>
-                <li><a href="/cotacao" className="hover:text-[#C1A36F] transition-colors font-montserrat">Cotação</a></li>
-                <li><a href="/insiders" className="hover:text-[#C1A36F] transition-colors font-montserrat">Grupo VIP</a></li>
+              <h4 className="font-bold text-white mb-4">Links Rápidos</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li><a href="/" className="hover:text-[#C1A36F] transition-colors">Início</a></li>
+                <li><a href="/cotacao" className="hover:text-[#C1A36F] transition-colors">Cotação</a></li>
+                <li><a href="/insiders" className="hover:text-[#C1A36F] transition-colors">Grupo VIP</a></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-playfair font-bold text-white mb-6 text-xl uppercase">Contato</h4>
-              <ul className="space-y-4 text-gray-300">
+              <h4 className="font-bold text-white mb-4">Contato</h4>
+              <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center">
-                  <Phone className="w-5 h-5 mr-4 text-[#C1A36F]" />
-                  <span className="font-montserrat">(11) 99999-9999</span>
+                  <Phone className="w-4 h-4 mr-2" />
+                  (11) 99999-9999
                 </li>
                 <li className="flex items-center">
-                  <Mail className="w-5 h-5 mr-4 text-[#C1A36F]" />
-                  <span className="font-montserrat">contato@nialy.com.br</span>
+                  <Mail className="w-4 h-4 mr-2" />
+                  contato@nialy.com.br
                 </li>
                 <li className="flex items-center">
-                  <MapPin className="w-5 h-5 mr-4 text-[#C1A36F]" />
-                  <span className="font-montserrat">São Paulo, SP</span>
+                  <MapPin className="w-4 h-4 mr-2" />
+                  São Paulo, SP
                 </li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-playfair font-bold text-white mb-6 text-xl uppercase">Redes Sociais</h4>
-              <div className="flex space-x-6">
-                <a href="#" className="text-gray-300 hover:text-[#C1A36F] transition-colors transform hover:scale-110">
-                  <Instagram className="w-8 h-8" />
+              <h4 className="font-bold text-white mb-4">Redes Sociais</h4>
+              <div className="flex space-x-4">
+                <a href="#" className="text-gray-300 hover:text-[#C1A36F] transition-colors">
+                  <Instagram className="w-6 h-6" />
                 </a>
-                <a href="#" className="text-gray-300 hover:text-[#C1A36F] transition-colors transform hover:scale-110">
-                  <MessageCircle className="w-8 h-8" />
+                <a href="#" className="text-gray-300 hover:text-[#C1A36F] transition-colors">
+                  <MessageCircle className="w-6 h-6" />
                 </a>
               </div>
             </div>
           </div>
           
           <div className="border-t border-gray-700 pt-8 text-center text-gray-300">
-            <p className="font-montserrat">&copy; 2025 NIALY. Todos os direitos reservados. CNPJ/Cadastur aqui.</p>
+            <p>&copy; 2025 NIALY. Todos os direitos reservados. CNPJ/Cadastur aqui.</p>
           </div>
         </div>
       </footer>

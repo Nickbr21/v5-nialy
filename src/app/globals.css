@@ -1,18 +1,4 @@
-@import '@fontsource/playfair-display/400.css';
-@import '@fontsource/playfair-display/700.css';
-@import '@fontsource/montserrat/400.css';
-@import '@fontsource/montserrat/600.css';
-@import '@fontsource/montserrat/700.css';
 @import "tailwindcss";
-
-/* Configuração de fontes */
-.font-playfair {
-  font-family: 'Playfair Display', serif;
-}
-
-.font-montserrat {
-  font-family: 'Montserrat', sans-serif;
-}
 
 /* Estilos personalizados NIALY */
 .title-hero {
@@ -22,6 +8,14 @@
 
 .title-section {
   font-family: 'Playfair Display', serif;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
 }
 
 .btn-primary {
