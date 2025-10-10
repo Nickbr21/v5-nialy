@@ -23,56 +23,56 @@ export default function IntermediariaInsidersPage() {
 
   const ofertas = [
     {
-      destino: "MIAMI",
-      titulo: "Experiência Art Deco Premium",
-      preco: "R$ 45.000",
-      precoOriginal: "R$ 78.000",
+      destino: "MIAMI, EUA",
+      titulo: "Passagens Aéreas (Ida e Volta)",
+      preco: "Economy a partir de R$ 2.397",
+      precoExecutiva: "Executiva a partir de R$ 10.998",
       desconto: "42% OFF",
-      duracao: "7 dias / 6 noites",
-      pessoas: "2 pessoas",
+      duracao: "Voos diretos disponíveis",
+      pessoas: "Por pessoa",
       inclui: [
-        "Voos executivos diretos",
-        "Hotel 5 estrelas em South Beach",
-        "Transfer em Rolls Royce",
-        "Jantar no Joe's Stone Crab",
-        "Tour privativo de arte em Wynwood",
-        "Yacht day com chef a bordo"
+        "Voos executivos com as melhores companhias",
+        "Seleção antecipada de assentos",
+        "Bagagem extra incluída",
+        "Lounge access nos aeroportos",
+        "Remarcação facilitada",
+        "Suporte 24h durante a viagem"
       ],
       imagem: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop"
     },
     {
-      destino: "LISBOA",
-      titulo: "Charme Português Exclusivo",
-      preco: "R$ 38.000",
-      precoOriginal: "R$ 65.000",
-      desconto: "41% OFF",
-      duracao: "8 dias / 7 noites",
-      pessoas: "2 pessoas",
+      destino: "EUROPA (Ex: Lisboa ou Madri)",
+      titulo: "Passagens Aéreas (Ida e Volta)",
+      preco: "Economy a partir de R$ 3.300",
+      precoExecutiva: "Executiva a partir de R$ 12.000",
+      desconto: "38% OFF",
+      duracao: "Conexões otimizadas",
+      pessoas: "Por pessoa",
       inclui: [
-        "Voos em classe executiva",
-        "Palácio convertido em hotel de luxo",
-        "Transfer em Mercedes Classe S",
-        "Degustação de vinhos no Douro",
-        "Aula de culinária com chef Michelin",
-        "Tour privativo pelos azulejos históricos"
+        "Voos com as melhores companhias europeias",
+        "Conexões inteligentes e confortáveis",
+        "Seguro viagem premium incluído",
+        "Fast track nos aeroportos",
+        "Assistência em português",
+        "Upgrade automático quando disponível"
       ],
       imagem: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600&h=400&fit=crop"
     },
     {
-      destino: "CANCÚN",
-      titulo: "Paraíso Maya Ultra-Luxo",
-      preco: "R$ 52.000",
-      precoOriginal: "R$ 89.000",
-      desconto: "42% OFF",
-      duracao: "6 dias / 5 noites",
-      pessoas: "2 pessoas",
+      destino: "CANCÚN, MÉXICO",
+      titulo: "Pacote 5 Noites (Aéreo + Resort All-Inclusive)",
+      preco: "A partir de R$ 4.500 por pessoa",
+      precoExecutiva: "",
+      desconto: "45% OFF",
+      duracao: "5 dias / 4 noites",
+      pessoas: "Pacote completo",
       inclui: [
-        "Jato privado para Cancún",
-        "Resort all-inclusive ultra-luxo",
-        "Butler service 24h",
-        "Mergulho nos cenotes sagrados",
-        "Jantar em restaurante subaquático",
-        "Spa maya com tratamentos ancestrais"
+        "Voos diretos para Cancún",
+        "Resort 5 estrelas all-inclusive",
+        "Transfer aeroporto-hotel-aeroporto",
+        "Todas as refeições e bebidas",
+        "Acesso a atividades aquáticas",
+        "Concierge personalizado no resort"
       ],
       imagem: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop"
     }
@@ -97,9 +97,9 @@ export default function IntermediariaInsidersPage() {
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6 font-playfair">
-            PARABÉNS!
+            SEJA BEM-VINDO AO
             <br />
-            <span className="text-[#C1A36F]">VOCÊ ESTÁ DENTRO</span>
+            <span className="text-[#C1A36F]">NIALY INSIDERS</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto font-montserrat">
@@ -108,7 +108,7 @@ export default function IntermediariaInsidersPage() {
           </p>
         </div>
 
-        {/* Ofertas exclusivas com imagens deslumbrantes */}
+        {/* Ofertas exclusivas com valores atualizados */}
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
           {ofertas.map((oferta, index) => (
             <div key={index} className="glass-effect rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
@@ -123,7 +123,7 @@ export default function IntermediariaInsidersPage() {
                   {oferta.desconto}
                 </div>
                 <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-lg">
-                  <div className="text-2xl font-bold font-playfair">{oferta.destino}</div>
+                  <div className="text-lg font-bold font-playfair">{oferta.destino}</div>
                 </div>
               </div>
               
@@ -133,20 +133,21 @@ export default function IntermediariaInsidersPage() {
                   {oferta.titulo}
                 </h3>
                 
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="text-3xl font-bold text-white font-playfair">{oferta.preco}</div>
-                    <div className="text-gray-400 line-through text-sm font-montserrat">{oferta.precoOriginal}</div>
+                <div className="mb-4">
+                  <div className="text-2xl font-bold text-white font-playfair mb-1">{oferta.preco}</div>
+                  {oferta.precoExecutiva && (
+                    <div className="text-lg text-[#C1A36F] font-playfair">{oferta.precoExecutiva}</div>
+                  )}
+                </div>
+                
+                <div className="text-right text-sm text-gray-300 font-montserrat mb-4">
+                  <div className="flex items-center gap-1 mb-1">
+                    <Calendar className="w-4 h-4" />
+                    {oferta.duracao}
                   </div>
-                  <div className="text-right text-sm text-gray-300 font-montserrat">
-                    <div className="flex items-center gap-1 mb-1">
-                      <Calendar className="w-4 h-4" />
-                      {oferta.duracao}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users className="w-4 h-4" />
-                      {oferta.pessoas}
-                    </div>
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    {oferta.pessoas}
                   </div>
                 </div>
                 
@@ -225,7 +226,7 @@ export default function IntermediariaInsidersPage() {
               href="https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de fazer parte do grupo VIP!"
               className="bg-black text-[#C1A36F] px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 font-montserrat"
             >
-              ACESSAR GRUPO AGORA
+              CLIQUE AQUI PARA ENTRAR NO GRUPO WHATSAPP
               <ExternalLink className="w-5 h-5" />
             </a>
           </div>

@@ -65,11 +65,26 @@ export default function InsidersLP() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* HERO SECTION COM VÍDEO */}
+      {/* HERO SECTION COM VÍDEO CINEMATOGRÁFICO */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Vídeo de fundo simulado com gradientes de destinos de luxo */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1F44] via-[#1a2f5a] to-black"></div>
-        <div className="absolute inset-0 bg-black/40"></div>
+        {/* Vídeo cinematográfico de fundo */}
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover"
+            poster="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&h=1080&fit=crop"
+          >
+            <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+            {/* Fallback para vídeo de destinos de luxo */}
+            <source src="https://cdn.pixabay.com/vimeo/459761340/luxury-travel-59879.mp4?width=1920&hash=b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0" type="video/mp4" />
+          </video>
+        </div>
+        
+        {/* Overlay azul-marinho com 75% de opacidade */}
+        <div className="absolute inset-0 bg-[#0A1F44]/75"></div>
         
         {/* Efeitos visuais de luxo */}
         <div className="absolute inset-0 opacity-30">
@@ -85,9 +100,9 @@ export default function InsidersLP() {
           </div>
           
           <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight font-playfair">
-            NIALY
+            ACESSO IMEDIATO ÀS
             <br />
-            <span className="text-[#C1A36F] text-glow">INSIDERS</span>
+            <span className="text-[#C1A36F] text-glow">OPORTUNIDADES MAIS COBIÇADAS DO MUNDO</span>
           </h1>
           
           <p className="text-2xl md:text-3xl mb-12 leading-relaxed text-gray-300 font-montserrat">
@@ -154,8 +169,8 @@ export default function InsidersLP() {
         </div>
       </section>
 
-      {/* ESCASSEZ - MOVIDA PARA APÓS OS BENEFÍCIOS */}
-      <section className="py-24 bg-[#C1A36F] text-black">
+      {/* ESCASSEZ - COM COR DOURADA */}
+      <section className="py-24 bg-[#C1A36F] text-[#0A1F44]">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-5xl font-bold mb-8 font-playfair">
             NÃO PERCA ESTA OPORTUNIDADE
@@ -167,15 +182,15 @@ export default function InsidersLP() {
           </p>
           
           {/* Timer de Luxo */}
-          <div className="bg-black/20 backdrop-blur-sm rounded-2xl p-8 mb-12 inline-block">
+          <div className="bg-[#0A1F44]/20 backdrop-blur-sm rounded-2xl p-8 mb-12 inline-block">
             <div className="text-lg font-semibold mb-4 font-montserrat">OFERTA EXPIRA EM:</div>
             <div className="flex justify-center items-center gap-4">
-              <div className="bg-black text-[#C1A36F] rounded-xl p-4 min-w-[80px]">
+              <div className="bg-[#0A1F44] text-[#C1A36F] rounded-xl p-4 min-w-[80px]">
                 <div className="text-3xl font-bold font-playfair">{timeLeft.minutes.toString().padStart(2, '0')}</div>
                 <div className="text-sm font-montserrat">MIN</div>
               </div>
               <div className="text-3xl font-bold">:</div>
-              <div className="bg-black text-[#C1A36F] rounded-xl p-4 min-w-[80px]">
+              <div className="bg-[#0A1F44] text-[#C1A36F] rounded-xl p-4 min-w-[80px]">
                 <div className="text-3xl font-bold font-playfair">{timeLeft.seconds.toString().padStart(2, '0')}</div>
                 <div className="text-sm font-montserrat">SEG</div>
               </div>
@@ -183,15 +198,15 @@ export default function InsidersLP() {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 text-left">
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-[#0A1F44]/20 backdrop-blur-sm rounded-xl p-6">
               <div className="text-3xl font-bold mb-2 font-playfair">87</div>
               <div className="text-sm font-montserrat">Vagas Preenchidas</div>
             </div>
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-[#0A1F44]/20 backdrop-blur-sm rounded-xl p-6">
               <div className="text-3xl font-bold mb-2 font-playfair">13</div>
               <div className="text-sm font-montserrat">Vagas Restantes</div>
             </div>
-            <div className="bg-black/20 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-[#0A1F44]/20 backdrop-blur-sm rounded-xl p-6">
               <div className="text-3xl font-bold mb-2 font-playfair">2025</div>
               <div className="text-sm font-montserrat">Próxima Abertura</div>
             </div>

@@ -83,7 +83,7 @@ export default function HomePage() {
     {
       name: "Ricardo Mendes",
       role: "CEO, Tech Solutions",
-      text: "A NIALY transformou completamente nossa visão sobre viagens corporativas. Cada detalhe foi pensado com uma precisão que jamais experimentamos antes.",
+      text: "A NIALY me economizou 8 horas de planejamento e me deu acesso a uma tarifa de executiva para Nova York 30% mais barata que em qualquer outro lugar. Para quem vive na correria, isso não é um luxo, é uma necessidade estratégica.",
       rating: 5,
       verified: true,
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
@@ -91,7 +91,7 @@ export default function HomePage() {
     {
       name: "Marina Silva",
       role: "Diretora de Marketing",
-      text: "Não é apenas uma agência, é uma experiência de vida. A curadoria dos destinos e o atendimento personalizado superam qualquer expectativa.",
+      text: "Tive um voo cancelado de madrugada em Frankfurt. Em menos de 15 minutos, a equipe NIALY já tinha me realocado em um novo voo e reservado um lounge VIP. Eles transformaram um pesadelo em uma experiência de primeira classe. Não viajo mais sem eles.",
       rating: 5,
       verified: true,
       image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
@@ -143,8 +143,9 @@ export default function HomePage() {
     });
   };
 
+  // Função para rolar suavemente até o formulário final
   const scrollToForm = () => {
-    const formSection = document.getElementById('FormularioFinal');
+    const formSection = document.getElementById('formulario-final');
     if (formSection) {
       formSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -152,14 +153,29 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white text-black overflow-x-hidden">
-      {/* HERO SECTION */}
-      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0A1F44] via-[#0A1F44] to-black">
-        {/* Vídeo cinematográfico simulado com gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0A1F44] via-[#1a2f5a] to-[#0A1F44]"></div>
-        <div className="absolute inset-0 bg-black/30"></div>
+      {/* HERO SECTION COM VÍDEO CINEMATOGRÁFICO 4K */}
+      <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Vídeo cinematográfico 4K de fundo */}
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover"
+            poster="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&h=1080&fit=crop"
+          >
+            <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+            {/* Fallback para vídeo de avião sobrevoando nuvens ao pôr do sol */}
+            <source src="https://cdn.pixabay.com/vimeo/459761340/airplane-59879.mp4?width=1920&hash=b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0" type="video/mp4" />
+          </video>
+        </div>
+        
+        {/* Overlay preto com 70% de opacidade */}
+        <div className="absolute inset-0 bg-black/70"></div>
         
         {/* Partículas douradas animadas */}
-        <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0 opacity-30">
           <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-[#C1A36F] rounded-full animate-pulse"></div>
           <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-[#D4AF37] rounded-full animate-pulse delay-1000"></div>
           <div className="absolute bottom-1/4 left-1/3 w-3 h-3 bg-[#C1A36F] rounded-full animate-pulse delay-2000"></div>
@@ -167,9 +183,9 @@ export default function HomePage() {
         </div>
         
         {/* Efeitos de luz cinematográficos */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
         {/* Conteúdo principal */}
@@ -212,7 +228,45 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* COMO FUNCIONA */}
+      {/* VIAJE COM SEGURANÇA */}
+      <section className="py-24 bg-[#F4F6F9]">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
+            VIAJE COM SEGURANÇA E TRANQUILIDADE
+          </h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: "COMPRA SEGURA",
+                description: "Transações protegidas com certificação SSL e garantia total de segurança em todos os pagamentos."
+              },
+              {
+                title: "CONSULTORIA ESPECIALIZADA", 
+                description: "Equipe de especialistas com mais de 15 anos de experiência em viagens de luxo e alta performance."
+              },
+              {
+                title: "ATENDIMENTO HUMANIZADO",
+                description: "Relacionamento próximo e personalizado, com dedicação exclusiva para cada cliente e suas necessidades."
+              },
+              {
+                title: "SUPORTE COMPLETO",
+                description: "Assistência 24/7 durante toda sua jornada, garantindo tranquilidade total em qualquer situação."
+              }
+            ].map((item, index) => (
+              <div key={index} className="text-center bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check className="w-6 h-6 text-black" />
+                </div>
+                <h3 className="text-xl font-bold mb-4 text-[#0A1F44] font-playfair">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed font-montserrat">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COMO FUNCIONA - COM CORREÇÃO DE ALINHAMENTO */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
@@ -220,8 +274,8 @@ export default function HomePage() {
           </h2>
           
           <div className="grid md:grid-cols-4 gap-8 relative">
-            {/* Linha conectora curva animada */}
-            <div className="hidden md:block absolute top-16 left-0 right-0 h-0.5">
+            {/* Linha conectora curva animada - ATRÁS DOS CÍRCULOS */}
+            <div className="hidden md:block absolute top-8 left-0 right-0 h-0.5 z-0">
               <svg className="w-full h-full" viewBox="0 0 100 1" preserveAspectRatio="none">
                 <path 
                   d="M0,0.5 Q25,0.2 50,0.5 T100,0.5" 
@@ -262,9 +316,10 @@ export default function HomePage() {
                 description: "Você vive cada momento sem preocupações, com suporte 24h e todos os detalhes cuidadosamente orquestrados."
               }
             ].map((item, index) => (
-              <div key={index} className="text-center relative animate-fadeInUp" style={{ animationDelay: `${index * 0.2}s` }}>
-                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center text-black font-bold text-xl mx-auto mb-6 shadow-xl relative z-10">
-                  {item.step}
+              <div key={index} className="text-center relative animate-fadeInUp z-10" style={{ animationDelay: `${index * 0.2}s` }}>
+                {/* CÍRCULO CENTRALIZADO CORRETAMENTE */}
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center text-black font-bold text-xl mx-auto mb-6 shadow-xl relative z-20">
+                  <span className="leading-none">{item.step}</span>
                 </div>
                 <h3 className="text-xl font-bold mb-4 text-[#0A1F44] font-playfair">{item.title}</h3>
                 <p className="text-gray-600 leading-relaxed font-montserrat">{item.description}</p>
@@ -274,7 +329,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FILOSOFIA NIALY */}
+      {/* FILOSOFIA NIALY - COM IMAGENS DE FUNDO */}
       <section className="py-24 bg-[#0A1F44] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C1A36F]/20 to-transparent"></div>
@@ -290,50 +345,62 @@ export default function HomePage() {
               {
                 letter: "N",
                 word: "NEXUS",
-                description: "Conectamos pessoas a experiências que transcendem o comum, criando vínculos profundos com destinos únicos."
+                description: "Conectamos pessoas a experiências que transcendem o comum, criando vínculos profundos com destinos únicos.",
+                bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop&crop=center"
               },
               {
                 letter: "I", 
                 word: "INNOVATION",
-                description: "Inovamos constantemente para oferecer soluções de viagem que antecipam e superam expectativas."
+                description: "Inovamos constantemente para oferecer soluções de viagem que antecipam e superam expectativas.",
+                bgImage: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=400&h=300&fit=crop&crop=center"
               },
               {
                 letter: "A",
                 word: "ASCEND", 
-                description: "Elevamos cada jornada a um patamar superior, transformando viagens em marcos de vida."
+                description: "Elevamos cada jornada a um patamar superior, transformando viagens em marcos de vida.",
+                bgImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&crop=center"
               },
               {
                 letter: "L",
                 word: "LEGACY",
-                description: "Construímos legados através de memórias inesquecíveis que se tornam parte da sua história."
+                description: "Construímos legados através de memórias inesquecíveis que se tornam parte da sua história.",
+                bgImage: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=300&fit=crop&crop=center"
               },
               {
                 letter: "Y",
                 word: "YIELD",
-                description: "Geramos resultados que vão além do esperado, entregando valor em cada momento da experiência."
+                description: "Geramos resultados que vão além do esperado, entregando valor em cada momento da experiência.",
+                bgImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=300&fit=crop&crop=center"
               }
             ].map((item, index) => (
               <div 
                 key={index} 
-                className="glass-effect rounded-xl p-8 text-center hover:scale-105 transition-all duration-300 hover:bg-[rgba(193,163,111,0.1)] text-white animate-fadeInUp"
+                className="glass-effect rounded-xl p-8 text-center hover:scale-105 transition-all duration-300 hover:bg-[rgba(193,163,111,0.1)] text-white animate-fadeInUp relative overflow-hidden"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-6xl font-bold text-[#C1A36F] mb-4 font-playfair">{item.letter}</div>
-                <h3 className="text-xl font-bold mb-4 font-playfair">{item.word}</h3>
-                <p className="text-gray-300 text-sm leading-relaxed font-montserrat">{item.description}</p>
+                {/* Imagem de fundo sutil */}
+                <div 
+                  className="absolute inset-0 opacity-10 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${item.bgImage})` }}
+                ></div>
+                <div className="relative z-10">
+                  <div className="text-6xl font-bold text-[#C1A36F] mb-4 font-playfair">{item.letter}</div>
+                  <h3 className="text-xl font-bold mb-4 font-playfair">{item.word}</h3>
+                  <p className="text-gray-300 text-sm leading-relaxed font-montserrat">{item.description}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* QUEM SOMOS */}
+      {/* QUEM SOMOS - COM FOTO DO NICOLAS */}
       <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-5xl font-bold mb-8 text-[#0A1F44] font-playfair">
-                QUEM SOMOS
+                CUIDANDO DE CADA DETALHE DA SUA VIAGEM
               </h2>
               <p className="text-xl leading-relaxed mb-6 text-gray-700 font-montserrat">
                 Somos mais que uma agência de viagens. Somos arquitetos de experiências, 
@@ -357,9 +424,10 @@ export default function HomePage() {
             
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
+                {/* FOTO PROFISSIONAL DO NICOLAS DI MORAIS EM P&B */}
                 <img 
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=600&fit=crop&crop=faces"
-                  alt="Equipe NIALY"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&crop=face"
+                  alt="Nicolas Di Morais - Fundador NIALY"
                   className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
                 />
               </div>
@@ -402,11 +470,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* DEPOIMENTOS */}
+      {/* DEPOIMENTOS - CARROSSEL INTERATIVO COM SELOS */}
       <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
-            O QUE NOSSOS CLIENTES ESTÃO FALANDO DE NÓS
+            O QUE NOSSOS CLIENTES ESTÃO DIZENDO
           </h2>
           
           <div className="relative max-w-4xl mx-auto">
@@ -437,6 +505,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+                {/* SELOS DE VERIFICAÇÃO */}
                 {testimonials[currentTestimonial].verified && (
                   <div className="flex justify-center gap-4">
                     <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">
@@ -452,7 +521,7 @@ export default function HomePage() {
               </div>
             </div>
             
-            {/* Indicadores */}
+            {/* Indicadores e navegação */}
             <div className="flex justify-center mt-8 gap-3">
               {testimonials.map((_, index) => (
                 <button
@@ -468,33 +537,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SERVIÇOS */}
+      {/* SERVIÇOS - CONTEÚDO ATUALIZADO */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
-            NOSSOS SERVIÇOS EXCLUSIVOS
+            NOSSOS SERVIÇOS
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 title: "PASSAGENS AÉREAS",
-                description: "Voos executivos e primeira classe com as melhores companhias aéreas do mundo, incluindo jatos privados.",
+                description: "Conectamos você ao mundo com exclusividade e inteligência. Oferecemos remarcações facilitadas, seleção antecipada de assentos e suporte premium em cada etapa.",
                 image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop"
               },
               {
-                title: "TRANSFER PREMIUM",
-                description: "Transporte de luxo com motoristas bilíngues e veículos premium para sua total comodidade.",
+                title: "TRANSFER E MOBILIDADE",
+                description: "Sua jornada com conforto do início ao fim. Oferecemos transfers privativos em todos os destinos, com veículos de luxo e motoristas experientes.",
                 image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&h=300&fit=crop"
               },
               {
-                title: "HOSPEDAGEM EXCLUSIVA",
-                description: "Hotéis 5 estrelas, resorts de luxo e propriedades exclusivas nos destinos mais desejados do mundo.",
+                title: "HOSPEDAGEM E RESORTS",
+                description: "Uma curadoria dos melhores hotéis e resorts do mundo. Garantimos a estadia perfeita, com pedidos especiais personalizados e experiências únicas.",
                 image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
               },
               {
                 title: "EXPERIÊNCIAS DISNEY",
-                description: "Pacotes VIP para Disney World e Disneyland com acesso exclusivo e experiências personalizadas.",
+                description: "Viva a magia com a sofisticação NIALY. Arquitetamos pacotes completos com ingressos, hospedagens nos melhores resorts e assistência personalizada.",
                 image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&h=300&fit=crop"
               }
             ].map((service, index) => (
@@ -518,8 +587,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FORMULÁRIO FINAL */}
-      <section id="FormularioFinal" className="py-24 bg-black relative overflow-hidden">
+      {/* FORMULÁRIO FINAL - COM ID ATUALIZADO */}
+      <section id="formulario-final" className="py-24 bg-black relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
           <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#0A1F44] rounded-full blur-3xl"></div>
@@ -629,7 +698,7 @@ export default function HomePage() {
                   disabled={isSubmitting}
                   className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50 disabled:opacity-50 disabled:cursor-not-allowed font-montserrat"
                 >
-                  {isSubmitting ? 'ENVIANDO...' : 'INICIAR MINHA JORNADA DOS SONHOS'}
+                  {isSubmitting ? 'ENVIANDO...' : 'SOLICITAR MINHA COTAÇÃO'}
                 </button>
               </div>
             </form>
@@ -693,7 +762,7 @@ export default function HomePage() {
           
           <div className="border-t border-gray-700 mt-12 pt-8 text-center">
             <p className="text-gray-400 font-montserrat">
-              © 2024 NIALY. Todos os direitos reservados. A arquitetura da jornada executiva.
+              © 2025 NIALY. Todos os direitos reservados. CNPJ/Cadastur aqui.
             </p>
           </div>
         </div>
