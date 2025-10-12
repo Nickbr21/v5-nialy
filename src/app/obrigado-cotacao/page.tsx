@@ -13,8 +13,23 @@ export default function GratidaoCotacaoPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Vídeo de fundo cinematográfico simulado */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A1F44] via-[#1a2f5a] to-black"></div>
+      {/* VÍDEO CINEMATOGRÁFICO DE FUNDO */}
+      <div className="absolute inset-0">
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+          className="w-full h-full object-cover"
+          poster="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&h=1080&fit=crop"
+        >
+          <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+          {/* Fallback para vídeo cinematográfico */}
+          <source src="https://cdn.pixabay.com/vimeo/459761340/cinematic-59879.mp4?width=1920&hash=b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0" type="video/mp4" />
+        </video>
+      </div>
+      
+      {/* Overlay escuro */}
       <div className="absolute inset-0 bg-black/50"></div>
       
       {/* Efeitos visuais cinematográficos */}
@@ -26,8 +41,8 @@ export default function GratidaoCotacaoPage() {
 
       <div className="relative z-10 min-h-screen flex items-center justify-center px-6">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Caixa de confirmação com efeito vidro fosco */}
-          <div className="glass-effect rounded-3xl p-12 md:p-16 text-white">
+          {/* CAIXA DE CONTEÚDO COM EFEITO VIDRO FOSCO */}
+          <div className="glass-effect rounded-3xl p-12 md:p-16 text-white backdrop-blur-lg bg-white/10 border border-white/20">
             {/* Ícone de sucesso */}
             <div className="w-20 h-20 bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-8">
               <Check className="w-10 h-10 text-black" />
@@ -43,7 +58,7 @@ export default function GratidaoCotacaoPage() {
             </p>
             
             {/* Seção: O Que Acontece Agora? */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-12 text-left">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 mb-12 text-left border border-white/10">
               <h2 className="text-3xl font-bold mb-8 text-[#C1A36F] text-center font-playfair">
                 O QUE ACONTECE AGORA?
               </h2>
@@ -82,7 +97,7 @@ export default function GratidaoCotacaoPage() {
             </div>
             
             {/* Cronograma detalhado */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 text-left">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 text-left border border-white/10">
               <h3 className="text-2xl font-bold mb-6 text-[#C1A36F] text-center font-playfair">
                 CRONOGRAMA DA SUA JORNADA
               </h3>
@@ -134,18 +149,28 @@ export default function GratidaoCotacaoPage() {
             </div>
             
             {/* Informações de contato */}
-            <div className="mt-12 p-6 bg-white/5 backdrop-blur-sm rounded-xl">
+            <div className="mt-12 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
               <h3 className="text-xl font-bold mb-4 text-[#C1A36F] font-playfair">
                 PRECISA FALAR CONOSCO?
               </h3>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-gray-300">
                 <div className="flex items-center gap-2">
                   <Phone className="w-5 h-5 text-[#C1A36F]" />
-                  <span className="font-montserrat">(11) 99999-9999</span>
+                  <a 
+                    href="https://wa.me/5511921731022" 
+                    className="font-montserrat hover:text-[#C1A36F] transition-colors"
+                  >
+                    +55 11 92173-1022
+                  </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-5 h-5 text-[#C1A36F]" />
-                  <span className="font-montserrat">contato@nialy.com.br</span>
+                  <a 
+                    href="mailto:atendimentonialy@gmail.com" 
+                    className="font-montserrat hover:text-[#C1A36F] transition-colors"
+                  >
+                    atendimentonialy@gmail.com
+                  </a>
                 </div>
               </div>
             </div>

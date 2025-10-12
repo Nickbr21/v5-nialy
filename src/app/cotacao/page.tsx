@@ -33,13 +33,33 @@ export default function CotacaoLP() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simular envio
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Formulário de cotação enviado:', formData);
-    
-    // Redirecionar para página de agradecimento
-    router.push('/obrigado-cotacao');
+    try {
+      // Enviar dados para o webhook do n8n
+      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/8ee524af-00c1-4785-9242-560cf7d1de4c', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          fonte: 'Landing Page de Cotação',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Formulário de cotação enviado:', formData);
+        
+        // Redirecionar para página de agradecimento
+        router.push('/obrigado-cotacao');
+      } else {
+        console.error('Erro ao enviar formulário');
+      }
+    } catch (error) {
+      console.error('Erro de conexão:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const nextStep = () => {
@@ -73,11 +93,11 @@ export default function CotacaoLP() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* IMAGEM DE FUNDO EM TELA CHEIA */}
+      {/* IMAGEM CINEMATOGRÁFICA DE FUNDO EM TELA CHEIA - CURVATURA DA TERRA À NOITE */}
       <div className="fixed inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=1920&h=1080&fit=crop"
-          alt="Visão da janela de um jato particular à noite mostrando a curvatura da Terra e as estrelas"
+          src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=1920&h=1080&fit=crop"
+          alt="Curvatura da Terra vista do espaço à noite com luzes das cidades brilhando"
           className="w-full h-full object-cover"
         />
         {/* Overlay azul-marinho com 80% de opacidade */}
@@ -468,10 +488,11 @@ export default function CotacaoLP() {
                           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                         >
                           <option value="">Selecione uma faixa</option>
-                          <option value="50k-100k">R$ 50.000 - R$ 100.000</option>
-                          <option value="100k-200k">R$ 100.000 - R$ 200.000</option>
-                          <option value="200k-500k">R$ 200.000 - R$ 500.000</option>
-                          <option value="500k+">Acima de R$ 500.000</option>
+                          <option value="ate-3500">Até 3.500</option>
+                          <option value="5k-10k">R$ 5.000 - R$ 10.000</option>
+                          <option value="10k-15k">R$ 10.000 - R$ 15.000</option>
+                          <option value="15k-25k">R$ 15.000 - R$ 25.000</option>
+                          <option value="acima-25k">Acima de R$ 25.000</option>
                         </select>
                       </div>
                       
@@ -484,11 +505,11 @@ export default function CotacaoLP() {
                           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                         >
                           <option value="">Selecione</option>
-                          <option value="hotel-luxo">Hotel de Luxo</option>
+                          <option value="hotel-4-5-estrelas">Hotel (4 ou 5 estrelas)</option>
                           <option value="resort">Resort</option>
-                          <option value="villa-privada">Villa Privada</option>
-                          <option value="boutique">Hotel Boutique</option>
                           <option value="cruzeiro">Cruzeiro</option>
+                          <option value="aluguel-temporada">Aluguel de Temporada (Casas e Villas)</option>
+                          <option value="hotel-boutique">Hotel Boutique</option>
                         </select>
                       </div>
                     </div>
@@ -528,7 +549,7 @@ export default function CotacaoLP() {
           </div>
         </section>
 
-        {/* RODAPÉ SIMPLIFICADO */}
+        {/* RODAPÉ SIMPLIFICADO ATUALIZADO */}
         <footer className="bg-black/50 backdrop-blur-sm py-12 border-t border-white/20">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <div className="text-3xl font-bold text-[#C1A36F] mb-4 font-playfair">NIALY</div>
@@ -538,11 +559,21 @@ export default function CotacaoLP() {
             <div className="flex justify-center items-center gap-6 text-gray-300">
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                <span className="font-montserrat">(11) 99999-9999</span>
+                <a 
+                  href="https://wa.me/5511921731022" 
+                  className="font-montserrat hover:text-[#C1A36F] transition-colors"
+                >
+                  +55 11 92173-1022
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <span className="font-montserrat">contato@nialy.com.br</span>
+                <a 
+                  href="mailto:atendimentonialy@gmail.com" 
+                  className="font-montserrat hover:text-[#C1A36F] transition-colors"
+                >
+                  atendimentonialy@gmail.com
+                </a>
               </div>
             </div>
           </div>

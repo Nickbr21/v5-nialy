@@ -1,13 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  compiler: {
-    styledComponents: false,
-  },
   experimental: {
-    styledJsx: false,
+    optimizePackageImports: ['lucide-react']
   },
-  swcMinify: true,
-  reactStrictMode: true,
-}
+  images: {
+    domains: [
+      'images.unsplash.com',
+      'k6hrqrxuu8obbfwn.public.blob.vercel-storage.com'
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'k6hrqrxuu8obbfwn.public.blob.vercel-storage.com',
+      }
+    ]
+  }
+};
 
-export default nextConfig
+export default nextConfig;

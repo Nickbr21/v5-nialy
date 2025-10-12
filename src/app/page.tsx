@@ -118,22 +118,41 @@ export default function HomePage() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simular envio
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Formulário enviado:', formData);
-    setIsModalOpen(false);
-    setIsSubmitting(false);
-    
-    // Reset form
-    setFormData({
-      nome: '',
-      email: '',
-      telefone: '',
-      destino: '',
-      orcamento: '',
-      mensagem: ''
-    });
+    try {
+      // Enviar dados para o webhook do n8n
+      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/8ee524af-00c1-4785-9242-560cf7d1de4c', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          fonte: 'Página Principal',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Formulário enviado com sucesso:', formData);
+        setIsModalOpen(false);
+        
+        // Reset form
+        setFormData({
+          nome: '',
+          email: '',
+          telefone: '',
+          destino: '',
+          orcamento: '',
+          mensagem: ''
+        });
+      } else {
+        console.error('Erro ao enviar formulário');
+      }
+    } catch (error) {
+      console.error('Erro de conexão:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -394,24 +413,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* QUEM SOMOS - COM FOTO DO NICOLAS */}
+      {/* QUEM SOMOS - SEÇÃO ATUALIZADA COM NOVO CONTEÚDO */}
       <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-5xl font-bold mb-8 text-[#0A1F44] font-playfair">
-                CUIDANDO DE CADA DETALHE DA SUA VIAGEM
+                O ARQUITETO POR TRÁS DA JORNADA
               </h2>
               <p className="text-xl leading-relaxed mb-6 text-gray-700 font-montserrat">
-                Somos mais que uma agência de viagens. Somos arquitetos de experiências, 
-                curadores de momentos únicos e guardiões dos seus sonhos mais ambiciosos.
+                Fundada pelo empresário Nicolas Di Morais, a NIALY nasceu com um propósito claro: revolucionar a forma como as pessoas vivenciam suas viagens. Com uma paixão pessoal transformada em expertise de mercado, Nicolas criou uma agência que não apenas vende destinos, mas que arquiteta experiências de vida, baseada em um serviço de suporte impecável e uma busca incessante por valor e qualidade.
               </p>
-              <p className="text-lg leading-relaxed mb-8 text-gray-600 font-montserrat">
-                Com mais de 15 anos de experiência no mercado de luxo, nossa equipe é formada 
-                por especialistas apaixonados por criar jornadas que transcendem o comum. 
-                Cada membro da NIALY compartilha a mesma obsessão: transformar suas viagens 
-                em capítulos inesquecíveis da sua história de vida.
-              </p>
+              
+              {/* Citação em destaque */}
+              <blockquote className="text-2xl leading-relaxed mb-8 text-gray-800 italic font-serif border-l-4 border-[#C1A36F] pl-6 bg-white/50 p-6 rounded-r-xl">
+                "Eu nunca vi a viagem como um custo, mas como o melhor investimento que uma pessoa pode fazer em si mesma, em sua família e em seus negócios. Minha obsessão é garantir que cada centavo e cada minuto desse investimento retorne como uma memória inesquecível e uma experiência impecável. Isso é o que significa o suporte NIALY."
+              </blockquote>
+              
+              {/* Assinatura */}
+              <div className="text-right mb-8">
+                <p className="text-lg font-bold text-[#0A1F44] font-playfair">
+                  – Nicolas Di Morais, Fundador & CEO
+                </p>
+              </div>
+              
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center">
                   <Check className="w-6 h-6 text-black" />
@@ -423,12 +448,12 @@ export default function HomePage() {
             </div>
             
             <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
-                {/* FOTO PROFISSIONAL DO NICOLAS DI MORAIS EM P&B */}
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
+                {/* FOTO REAL DO NICOLAS DI MORAIS */}
                 <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&crop=face"
+                  src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/de28120a-2e4a-480b-8001-2e747c6fd624.jpg"
                   alt="Nicolas Di Morais - Fundador NIALY"
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-full object-cover object-top transition-all duration-500"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-[#C1A36F] text-black p-6 rounded-xl shadow-xl">
@@ -587,7 +612,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FORMULÁRIO FINAL - COM ID ATUALIZADO */}
+      {/* FORMULÁRIO FINAL - COM ID ATUALIZADO E CAMPOS ATUALIZADOS */}
       <section id="formulario-final" className="py-24 bg-black relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
@@ -655,11 +680,12 @@ export default function HomePage() {
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                 >
                   <option value="">Selecione um destino</option>
+                  <option value="estados-unidos">Estados Unidos</option>
                   <option value="europa">Europa</option>
+                  <option value="america-sul">América do Sul</option>
+                  <option value="caribe-mexico">Caribe & México</option>
                   <option value="asia">Ásia</option>
-                  <option value="americas">Américas</option>
-                  <option value="africa">África</option>
-                  <option value="oceania">Oceania</option>
+                  <option value="brasil">Brasil</option>
                   <option value="outro">Outro</option>
                 </select>
               </div>
@@ -673,10 +699,11 @@ export default function HomePage() {
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                 >
                   <option value="">Selecione uma faixa</option>
-                  <option value="50k-100k">R$ 50.000 - R$ 100.000</option>
-                  <option value="100k-200k">R$ 100.000 - R$ 200.000</option>
-                  <option value="200k-500k">R$ 200.000 - R$ 500.000</option>
-                  <option value="500k+">Acima de R$ 500.000</option>
+                  <option value="ate-3500">Até 3.500</option>
+                  <option value="5k-10k">R$ 5.000 - R$ 10.000</option>
+                  <option value="10k-15k">R$ 10.000 - R$ 15.000</option>
+                  <option value="15k-25k">R$ 15.000 - R$ 25.000</option>
+                  <option value="acima-25k">Acima de R$ 25.000</option>
                 </select>
               </div>
               
@@ -706,7 +733,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RODAPÉ */}
+      {/* RODAPÉ ATUALIZADO COM NOVAS INFORMAÇÕES DE CONTATO */}
       <footer className="bg-[#0A1F44] py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12">
@@ -728,15 +755,27 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-[#C1A36F]" />
-                  <span className="text-gray-300 font-montserrat">(11) 99999-9999</span>
+                  <a 
+                    href="https://wa.me/5511921731022" 
+                    className="text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat"
+                  >
+                    +55 11 92173-1022
+                  </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-[#C1A36F]" />
-                  <span className="text-gray-300 font-montserrat">contato@nialy.com.br</span>
+                  <a 
+                    href="mailto:atendimentonialy@gmail.com" 
+                    className="text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat"
+                  >
+                    atendimentonialy@gmail.com
+                  </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-[#C1A36F]" />
-                  <span className="text-gray-300 font-montserrat">São Paulo, SP</span>
+                  <span className="text-gray-300 font-montserrat">
+                    Alphaville, Alameda Rio Negro, 585, Barueri - SP
+                  </span>
                 </div>
               </div>
             </div>
@@ -833,11 +872,12 @@ export default function HomePage() {
                   className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                 >
                   <option value="">Selecione um destino</option>
+                  <option value="estados-unidos">Estados Unidos</option>
                   <option value="europa">Europa</option>
+                  <option value="america-sul">América do Sul</option>
+                  <option value="caribe-mexico">Caribe & México</option>
                   <option value="asia">Ásia</option>
-                  <option value="americas">Américas</option>
-                  <option value="africa">África</option>
-                  <option value="oceania">Oceania</option>
+                  <option value="brasil">Brasil</option>
                   <option value="outro">Outro</option>
                 </select>
               </div>

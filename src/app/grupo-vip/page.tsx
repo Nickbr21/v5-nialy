@@ -17,6 +17,7 @@ export default function GrupoVipPage() {
     email: '',
     whatsapp: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Timer countdown (5 minutos = 300 segundos)
   useEffect(() => {
@@ -95,30 +96,69 @@ export default function GrupoVipPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Inscrição VIP enviada:', formData);
-    // Redirecionar para página intermediária
-    router.push('/bem-vindo-vip');
+    setIsSubmitting(true);
+    
+    try {
+      // Enviar dados para o webhook do n8n
+      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/8ee524af-00c1-4785-9242-560cf7d1de4c', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          fonte: 'Landing Page do Grupo VIP',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Inscrição VIP enviada:', formData);
+        // Redirecionar diretamente para o grupo do WhatsApp - LINK CORRETO
+        window.location.href = 'https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599';
+      } else {
+        console.error('Erro ao enviar formulário');
+        // Mesmo com erro, redirecionar para o WhatsApp
+        window.location.href = 'https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599';
+      }
+    } catch (error) {
+      console.error('Erro de conexão:', error);
+      // Mesmo com erro, redirecionar para o WhatsApp
+      window.location.href = 'https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599';
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section with Video Background */}
+      {/* Hero Section with Video Background - VÍDEO CINEMATOGRÁFICO DE EXPERIÊNCIAS DE LUXO */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="w-full h-full bg-gradient-to-r from-[#0A1F44]/90 to-[#0A1F44]/70 relative">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&h=1080&fit=crop')] bg-cover bg-center bg-no-repeat"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F44]/80 to-[#0A1F44]/60"></div>
-          </div>
+          {/* Vídeo cinematográfico com cortes rápidos de experiências de luxo */}
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover"
+            poster="https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1920&h=1080&fit=crop"
+          >
+            <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27eecc69a27dbc4ff2b87d38afc35f1a9e7c02d&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+            {/* Fallback para vídeo de experiências de luxo */}
+            <source src="https://cdn.pixabay.com/vimeo/459761340/luxury-59879.mp4?width=1920&hash=b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F44]/80 to-[#0A1F44]/60"></div>
         </div>
 
         <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
           <div className="flex items-center justify-center mb-6">
             <Crown className="w-16 h-16 text-[#C1A36F] mr-4" />
             <h1 className="text-5xl md:text-7xl font-bold font-serif">
-              GRUPO VIP
-              <span className="block text-[#C1A36F]">NIALY</span>
+              ACESSO IMEDIATO
+              <span className="block text-[#C1A36F]">GRUPO VIP NIALY</span>
             </h1>
           </div>
           
@@ -374,10 +414,11 @@ export default function GrupoVipPage() {
 
               <button
                 type="submit"
-                className="w-full bg-[#C1A36F] hover:bg-[#B8956A] text-white py-5 rounded-xl text-xl font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
+                disabled={isSubmitting}
+                className="w-full bg-[#C1A36F] hover:bg-[#B8956A] text-white py-5 rounded-xl text-xl font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Crown className="w-6 h-6 mr-3" />
-                QUERO SER MEMBRO VIP AGORA
+                {isSubmitting ? 'ENVIANDO...' : 'QUERO SER MEMBRO VIP AGORA'}
                 <ArrowRight className="w-6 h-6 ml-3" />
               </button>
               
@@ -386,6 +427,22 @@ export default function GrupoVipPage() {
                 Seus dados estão 100% seguros conosco.
               </p>
             </form>
+
+            {/* Botão adicional para acesso direto ao WhatsApp */}
+            <div className="mt-8 pt-8 border-t border-gray-200">
+              <div className="text-center">
+                <p className="text-gray-600 mb-4">Ou acesse diretamente o grupo VIP:</p>
+                <a
+                  href="https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg"
+                >
+                  <Phone className="w-6 h-6 mr-3" />
+                  ENTRAR NO GRUPO WHATSAPP VIP
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -404,7 +461,7 @@ export default function GrupoVipPage() {
                 <a href="#" className="w-12 h-12 bg-[#C1A36F] rounded-full flex items-center justify-center hover:bg-[#B8956A] transition-colors">
                   <Instagram className="w-6 h-6 text-white" />
                 </a>
-                <a href="https://wa.me/5511999999999" className="w-12 h-12 bg-[#C1A36F] rounded-full flex items-center justify-center hover:bg-[#B8956A] transition-colors">
+                <a href="https://wa.me/5511921731022" className="w-12 h-12 bg-[#C1A36F] rounded-full flex items-center justify-center hover:bg-[#B8956A] transition-colors">
                   <Phone className="w-6 h-6 text-white" />
                 </a>
               </div>
@@ -422,11 +479,21 @@ export default function GrupoVipPage() {
               <div className="space-y-3 text-gray-300">
                 <p className="flex items-center">
                   <Phone className="w-4 h-4 mr-2 text-[#C1A36F]" />
-                  (11) 99999-9999
+                  <a 
+                    href="https://wa.me/5511921731022" 
+                    className="hover:text-[#C1A36F] transition-colors"
+                  >
+                    +55 11 92173-1022
+                  </a>
                 </p>
                 <p className="flex items-center">
                   <Mail className="w-4 h-4 mr-2 text-[#C1A36F]" />
-                  vip@nialy.com.br
+                  <a 
+                    href="mailto:atendimentonialy@gmail.com" 
+                    className="hover:text-[#C1A36F] transition-colors"
+                  >
+                    atendimentonialy@gmail.com
+                  </a>
                 </p>
                 <p className="flex items-center">
                   <Instagram className="w-4 h-4 mr-2 text-[#C1A36F]" />
