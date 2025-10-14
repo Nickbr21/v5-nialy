@@ -278,47 +278,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* POR QUE A NIALY? - SEÇÃO ATUALIZADA SEM "15 ANOS" */}
-      <section className="py-24 bg-[#0A1F44] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <h2 className="text-5xl font-bold text-center mb-20 text-white font-serif">
-            POR QUE A NIALY?
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            {/* Card 1 - Expertise Visionária */}
-            <div className="bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl p-8 border border-[rgba(193,163,111,0.2)] hover:bg-[rgba(193,163,111,0.1)] transition-all duration-300 animate-fadeInUp">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
-                <Check className="w-8 h-8 text-black" />
-              </div>
-              <h3 className="text-2xl font-bold mb-6 text-white text-center font-serif">
-                EXPERTISE VISIONÁRIA
-              </h3>
-              <p className="text-gray-300 leading-relaxed text-center font-inter">
-                Não seguimos o mercado; nós o redefinimos. Nossa abordagem de vanguarda antecipa tendências e aplica soluções inovadoras para criar jornadas que são o futuro das viagens de luxo.
-              </p>
-            </div>
-
-            {/* Card 2 - Rede Global Exclusiva */}
-            <div className="bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl p-8 border border-[rgba(193,163,111,0.2)] hover:bg-[rgba(193,163,111,0.1)] transition-all duration-300 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
-                <Check className="w-8 h-8 text-black" />
-              </div>
-              <h3 className="text-2xl font-bold mb-6 text-white text-center font-serif">
-                REDE GLOBAL EXCLUSIVA
-              </h3>
-              <p className="text-gray-300 leading-relaxed text-center font-inter">
-                Parcerias com os melhores hotéis, companhias aéreas e prestadores de serviços de luxo do mundo, garantindo acesso privilegiado e experiências únicas.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* VIAJE COM SEGURANÇA */}
       <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-7xl mx-auto px-6">
