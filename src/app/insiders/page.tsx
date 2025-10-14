@@ -54,13 +54,39 @@ export default function InsidersLP() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simular envio
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Formulário Insiders enviado:', formData);
-    
-    // Redirecionar para página intermediária
-    router.push('/bem-vindo-insiders');
+    try {
+      // Enviar dados para o webhook
+      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/76687a05-477d-4f5d-acf6-8ef5b434f937', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: formData.nome,
+          email: formData.email,
+          telefone: formData.telefone,
+          tipo_formulario: 'grupo_vip_exclusivo',
+          pagina: 'insiders',
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      if (response.ok) {
+        console.log('✅ Dados enviados com sucesso para o webhook');
+        
+        // Redirecionar para página intermediária
+        router.push('/bem-vindo-insiders');
+      } else {
+        throw new Error('Erro no envio para webhook');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao enviar dados:', error);
+      
+      // Fallback: ainda redireciona mesmo com erro
+      router.push('/bem-vindo-insiders');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

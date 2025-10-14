@@ -17,7 +17,6 @@ export default function GrupoVipPage() {
     email: '',
     whatsapp: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Timer countdown (5 minutos = 300 segundos)
   useEffect(() => {
@@ -96,40 +95,11 @@ export default function GrupoVipPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      // Enviar dados para o webhook do n8n
-      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/8ee524af-00c1-4785-9242-560cf7d1de4c', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          fonte: 'Landing Page do Grupo VIP',
-          timestamp: new Date().toISOString()
-        }),
-      });
-
-      if (response.ok) {
-        console.log('Inscrição VIP enviada:', formData);
-        // Redirecionar diretamente para o grupo do WhatsApp - LINK CORRETO
-        window.location.href = 'https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599';
-      } else {
-        console.error('Erro ao enviar formulário');
-        // Mesmo com erro, redirecionar para o WhatsApp
-        window.location.href = 'https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599';
-      }
-    } catch (error) {
-      console.error('Erro de conexão:', error);
-      // Mesmo com erro, redirecionar para o WhatsApp
-      window.location.href = 'https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599';
-    } finally {
-      setIsSubmitting(false);
-    }
+    console.log('Inscrição VIP enviada:', formData);
+    // Redirecionar para página intermediária
+    router.push('/bem-vindo-vip');
   };
 
   return (
@@ -414,11 +384,10 @@ export default function GrupoVipPage() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[#C1A36F] hover:bg-[#B8956A] text-white py-5 rounded-xl text-xl font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#C1A36F] hover:bg-[#B8956A] text-white py-5 rounded-xl text-xl font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center"
               >
                 <Crown className="w-6 h-6 mr-3" />
-                {isSubmitting ? 'ENVIANDO...' : 'QUERO SER MEMBRO VIP AGORA'}
+                QUERO SER MEMBRO VIP AGORA
                 <ArrowRight className="w-6 h-6 ml-3" />
               </button>
               
@@ -427,22 +396,6 @@ export default function GrupoVipPage() {
                 Seus dados estão 100% seguros conosco.
               </p>
             </form>
-
-            {/* Botão adicional para acesso direto ao WhatsApp */}
-            <div className="mt-8 pt-8 border-t border-gray-200">
-              <div className="text-center">
-                <p className="text-gray-600 mb-4">Ou acesse diretamente o grupo VIP:</p>
-                <a
-                  href="https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg"
-                >
-                  <Phone className="w-6 h-6 mr-3" />
-                  ENTRAR NO GRUPO WHATSAPP VIP
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </section>

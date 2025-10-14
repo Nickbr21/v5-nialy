@@ -10,8 +10,8 @@ export default function IntermediariaInsidersPage() {
     const timer = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
-          // Redirecionar para o WhatsApp (substitua pelo link real do grupo)
-          window.location.href = "https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de fazer parte do grupo VIP!";
+          // Redirecionar para o WhatsApp - Correção avançada para contornar bloqueios de iframe/sandbox
+          window.top.location.href = 'https://bit.ly/NialyVIP';
           return 0;
         }
         return prev - 1;
@@ -223,7 +223,7 @@ export default function IntermediariaInsidersPage() {
               Ou clique no botão abaixo para acessar imediatamente
             </p>
             <a 
-              href="https://wa.me/5511999999999?text=Olá! Acabei de me inscrever no NIALY Insiders e gostaria de fazer parte do grupo VIP!"
+              href="https://chat.whatsapp.com/LV2UX0U4wCzKMekkjI8599"
               className="bg-black text-[#C1A36F] px-8 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 font-montserrat"
             >
               CLIQUE AQUI PARA ENTRAR NO GRUPO WHATSAPP

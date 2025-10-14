@@ -32,14 +32,14 @@ export default function BemVindoVipPage() {
       destination: "MIAMI, EUA",
       title: "Passagens Aéreas (Round Trip)",
       prices: "Economy a partir de R$ 2.590 | Executiva a partir de R$ 10.999",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+      image: "https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/247575d1-d247-4108-8dce-848cde35ad91.jpg",
       features: ["Remarcação gratuita", "Seleção de assento", "Bagagem incluída", "Suporte 24/7"]
     },
     {
       destination: "LISBOA, PORTUGAL",
       title: "Pacote 5 Noites (Aéreo + Hotel 4 Estrelas)",
       prices: "A partir de R$ 4.850 por pessoa",
-      image: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=400&h=300&fit=crop",
+      image: "https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/0c50f4f5-91c0-49dd-b6a6-0b291b2c1045.png",
       features: ["Voo direto incluído", "Hotel centro histórico", "Café da manhã", "City tour gratuito"]
     },
     {

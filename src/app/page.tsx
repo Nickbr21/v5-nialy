@@ -1,24 +1,30 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Play, Star, Check, ArrowRight, Phone, Mail, Instagram, MapPin } from 'lucide-react';
+import { ChevronRight, Play, Star, Check, ArrowRight, Phone, Mail, Instagram, MapPin, ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    nome: '',
+    nomeCompleto: '',
     email: '',
-    telefone: '',
-    destino: '',
-    orcamento: '',
-    mensagem: ''
+    whatsapp: '',
+    origem: '',
+    destinoDesejado: '',
+    dataIda: '',
+    dataVolta: '',
+    flexibilidadeDatas: '',
+    viagemSonhos: '',
+    orcamento: ''
   });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [counters, setCounters] = useState({
     clientes: 0,
     satisfacao: 0,
     destinos: 0,
-    experiencia: 0
+    parcerias: 0
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,7 +52,7 @@ export default function HomePage() {
   }, []);
 
   const animateCounters = () => {
-    const targets = { clientes: 10000, satisfacao: 100, destinos: 150, experiencia: 15 };
+    const targets = { clientes: 10000, satisfacao: 100, destinos: 150, parcerias: 50 };
     const duration = 2000;
     const steps = 60;
     const stepTime = duration / steps;
@@ -61,7 +67,7 @@ export default function HomePage() {
         clientes: Math.floor(targets.clientes * easeOutExpo),
         satisfacao: Math.floor(targets.satisfacao * easeOutExpo),
         destinos: Math.floor(targets.destinos * easeOutExpo),
-        experiencia: Math.floor(targets.experiencia * easeOutExpo)
+        parcerias: Math.floor(targets.parcerias * easeOutExpo)
       });
 
       if (step >= steps) {
@@ -119,38 +125,54 @@ export default function HomePage() {
     setIsSubmitting(true);
     
     try {
-      // Enviar dados para o webhook do n8n
-      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/8ee524af-00c1-4785-9242-560cf7d1de4c', {
+      // Enviar dados para o webhook
+      const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/b0f60b96-d2f3-49b2-bb8d-bc2cebe8166e', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData,
-          fonte: 'Página Principal',
+          nomeCompleto: formData.nomeCompleto,
+          email: formData.email,
+          whatsapp: formData.whatsapp,
+          origem: formData.origem,
+          destinoDesejado: formData.destinoDesejado,
+          dataIda: formData.dataIda,
+          dataVolta: formData.dataVolta,
+          flexibilidadeDatas: formData.flexibilidadeDatas,
+          viagemSonhos: formData.viagemSonhos,
+          orcamento: formData.orcamento,
+          fonte: 'Página Principal - Modal',
           timestamp: new Date().toISOString()
-        }),
+        })
       });
 
-      if (response.ok) {
-        console.log('Formulário enviado com sucesso:', formData);
-        setIsModalOpen(false);
-        
-        // Reset form
-        setFormData({
-          nome: '',
-          email: '',
-          telefone: '',
-          destino: '',
-          orcamento: '',
-          mensagem: ''
-        });
-      } else {
-        console.error('Erro ao enviar formulário');
-      }
+      console.log('Webhook response:', response.status);
+      
+      // Redirecionar para página de agradecimento
+      router.push('/obrigado-cotacao');
+      
+      setIsModalOpen(false);
+      setIsSubmitting(false);
+      
+      // Reset form
+      setFormData({
+        nomeCompleto: '',
+        email: '',
+        whatsapp: '',
+        origem: '',
+        destinoDesejado: '',
+        dataIda: '',
+        dataVolta: '',
+        flexibilidadeDatas: '',
+        viagemSonhos: '',
+        orcamento: ''
+      });
     } catch (error) {
-      console.error('Erro de conexão:', error);
-    } finally {
+      console.error('Erro no envio:', error);
+      // Mesmo com erro, redireciona para manter a experiência do usuário
+      router.push('/obrigado-cotacao');
+      setIsModalOpen(false);
       setIsSubmitting(false);
     }
   };
@@ -168,6 +190,15 @@ export default function HomePage() {
     if (formSection) {
       formSection.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  // Navegação do carrossel
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   return (
@@ -209,7 +240,7 @@ export default function HomePage() {
 
         {/* Conteúdo principal */}
         <div className="relative z-10 text-center max-w-6xl mx-auto px-6 text-white">
-          <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight font-playfair">
+          <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight font-serif">
             DESCUBRA SUA PRÓXIMA
             <br />
             <span className="text-[#C1A36F] text-glow">
@@ -217,7 +248,7 @@ export default function HomePage() {
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed text-gray-300 font-montserrat font-light">
+          <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed text-gray-300 font-inter font-light">
             Onde cada detalhe é pensado para transformar sua viagem em uma experiência inesquecível. 
             Deixe a complexidade conosco e viva apenas momentos extraordinários.
           </p>
@@ -230,12 +261,12 @@ export default function HomePage() {
               INICIAR MEU PLANEJAMENTO
             </button>
             
-            <a 
-              href="/insiders"
+            <button 
+              onClick={() => router.push('/insiders')}
               className="border-2 border-[#C1A36F] text-[#C1A36F] px-12 py-4 rounded-xl text-lg font-bold hover:bg-[#C1A36F] hover:text-black transition-all duration-300"
             >
               GRUPO VIP EXCLUSIVO
-            </a>
+            </button>
           </div>
         </div>
 
@@ -247,10 +278,51 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* POR QUE A NIALY? - SEÇÃO ATUALIZADA SEM "15 ANOS" */}
+      <section className="py-24 bg-[#0A1F44] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <h2 className="text-5xl font-bold text-center mb-20 text-white font-serif">
+            POR QUE A NIALY?
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* Card 1 - Expertise Visionária */}
+            <div className="bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl p-8 border border-[rgba(193,163,111,0.2)] hover:bg-[rgba(193,163,111,0.1)] transition-all duration-300 animate-fadeInUp">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
+                <Check className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-bold mb-6 text-white text-center font-serif">
+                EXPERTISE VISIONÁRIA
+              </h3>
+              <p className="text-gray-300 leading-relaxed text-center font-inter">
+                Não seguimos o mercado; nós o redefinimos. Nossa abordagem de vanguarda antecipa tendências e aplica soluções inovadoras para criar jornadas que são o futuro das viagens de luxo.
+              </p>
+            </div>
+
+            {/* Card 2 - Rede Global Exclusiva */}
+            <div className="bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl p-8 border border-[rgba(193,163,111,0.2)] hover:bg-[rgba(193,163,111,0.1)] transition-all duration-300 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+              <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
+                <Check className="w-8 h-8 text-black" />
+              </div>
+              <h3 className="text-2xl font-bold mb-6 text-white text-center font-serif">
+                REDE GLOBAL EXCLUSIVA
+              </h3>
+              <p className="text-gray-300 leading-relaxed text-center font-inter">
+                Parcerias com os melhores hotéis, companhias aéreas e prestadores de serviços de luxo do mundo, garantindo acesso privilegiado e experiências únicas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* VIAJE COM SEGURANÇA */}
       <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-serif">
             VIAJE COM SEGURANÇA E TRANQUILIDADE
           </h2>
           
@@ -262,7 +334,7 @@ export default function HomePage() {
               },
               {
                 title: "CONSULTORIA ESPECIALIZADA", 
-                description: "Equipe de especialistas com mais de 15 anos de experiência em viagens de luxo e alta performance."
+                description: "Equipe de especialistas dedicados em viagens de luxo e alta performance, com conhecimento profundo do mercado global."
               },
               {
                 title: "ATENDIMENTO HUMANIZADO",
@@ -277,8 +349,8 @@ export default function HomePage() {
                 <div className="w-12 h-12 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6">
                   <Check className="w-6 h-6 text-black" />
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-[#0A1F44] font-playfair">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed font-montserrat">{item.description}</p>
+                <h3 className="text-xl font-bold mb-4 text-[#0A1F44] font-serif">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed font-inter">{item.description}</p>
               </div>
             ))}
           </div>
@@ -288,7 +360,7 @@ export default function HomePage() {
       {/* COMO FUNCIONA - COM CORREÇÃO DE ALINHAMENTO */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-serif">
             COMO FUNCIONA
           </h2>
           
@@ -340,8 +412,8 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center text-black font-bold text-xl mx-auto mb-6 shadow-xl relative z-20">
                   <span className="leading-none">{item.step}</span>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-[#0A1F44] font-playfair">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed font-montserrat">{item.description}</p>
+                <h3 className="text-xl font-bold mb-4 text-[#0A1F44] font-serif">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed font-inter">{item.description}</p>
               </div>
             ))}
           </div>
@@ -355,7 +427,7 @@ export default function HomePage() {
         </div>
         
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <h2 className="text-5xl font-bold text-center mb-20 text-white font-playfair">
+          <h2 className="text-5xl font-bold text-center mb-20 text-white font-serif">
             O CÓDIGO NIALY: NOSSA FILOSOFIA
           </h2>
           
@@ -403,9 +475,9 @@ export default function HomePage() {
                   style={{ backgroundImage: `url(${item.bgImage})` }}
                 ></div>
                 <div className="relative z-10">
-                  <div className="text-6xl font-bold text-[#C1A36F] mb-4 font-playfair">{item.letter}</div>
-                  <h3 className="text-xl font-bold mb-4 font-playfair">{item.word}</h3>
-                  <p className="text-gray-300 text-sm leading-relaxed font-montserrat">{item.description}</p>
+                  <div className="text-6xl font-bold text-[#C1A36F] mb-4 font-serif">{item.letter}</div>
+                  <h3 className="text-xl font-bold mb-4 font-serif">{item.word}</h3>
+                  <p className="text-gray-300 text-sm leading-relaxed font-inter">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -413,66 +485,83 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* QUEM SOMOS - SEÇÃO ATUALIZADA COM NOVO CONTEÚDO */}
-      <section className="py-24 bg-[#F4F6F9]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-5xl font-bold mb-8 text-[#0A1F44] font-playfair">
-                O ARQUITETO POR TRÁS DA JORNADA
-              </h2>
-              <p className="text-xl leading-relaxed mb-6 text-gray-700 font-montserrat">
-                Fundada pelo empresário Nicolas Di Morais, a NIALY nasceu com um propósito claro: revolucionar a forma como as pessoas vivenciam suas viagens. Com uma paixão pessoal transformada em expertise de mercado, Nicolas criou uma agência que não apenas vende destinos, mas que arquiteta experiências de vida, baseada em um serviço de suporte impecável e uma busca incessante por valor e qualidade.
-              </p>
-              
-              {/* Citação em destaque */}
-              <blockquote className="text-2xl leading-relaxed mb-8 text-gray-800 italic font-serif border-l-4 border-[#C1A36F] pl-6 bg-white/50 p-6 rounded-r-xl">
-                "Eu nunca vi a viagem como um custo, mas como o melhor investimento que uma pessoa pode fazer em si mesma, em sua família e em seus negócios. Minha obsessão é garantir que cada centavo e cada minuto desse investimento retorne como uma memória inesquecível e uma experiência impecável. Isso é o que significa o suporte NIALY."
-              </blockquote>
-              
-              {/* Assinatura */}
-              <div className="text-right mb-8">
-                <p className="text-lg font-bold text-[#0A1F44] font-playfair">
-                  – Nicolas Di Morais, Fundador & CEO
-                </p>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#C1A36F] to-[#D4AF37] rounded-full flex items-center justify-center">
-                  <Check className="w-6 h-6 text-black" />
-                </div>
-                <span className="text-lg font-semibold text-[#0A1F44] font-montserrat">
-                  Certificados pelos principais órgãos internacionais de turismo
-                </span>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-                {/* FOTO REAL DO NICOLAS DI MORAIS */}
+      {/* O ARQUITETO POR TRÁS DA JORNADA - REDESIGN COMPLETO COM FUNDO PRETO ABSOLUTO */}
+      <section className="py-32 bg-[#050505] relative overflow-hidden">
+        {/* Textura de ruído muito sutil para criar profundidade */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiLz48L2c+PC9nPjwvc3ZnPg==')] repeat"></div>
+        </div>
+
+        {/* Efeitos de luz cinematográficos */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#D4AF37] rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            {/* Foto do Fundador - Lado Esquerdo - MAIOR E MELHOR POSICIONADA */}
+            <div className="relative animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative group">
+                {/* Foto em cores normais com alta resolução - CENTRALIZADA E GRANDE */}
                 <img 
                   src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/de28120a-2e4a-480b-8001-2e747c6fd624.jpg"
                   alt="Nicolas Di Morais - Fundador NIALY"
-                  className="w-full h-full object-cover object-top transition-all duration-500"
+                  className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-105"
                 />
+                {/* Overlay sutil para aumentar contraste */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-[#C1A36F] text-black p-6 rounded-xl shadow-xl">
-                <div className="text-3xl font-bold font-playfair">15+</div>
-                <div className="text-sm font-semibold font-montserrat">Anos de Excelência</div>
+              
+              {/* Efeito de luz ao redor da foto */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-[#C1A36F]/20 to-[#D4AF37]/20 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+            </div>
+            
+            {/* Conteúdo - Lado Direito com largura menor para criar espaço negativo elegante */}
+            <div className="max-w-xl animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
+              <h2 className="text-6xl font-bold mb-12 text-white font-serif leading-tight">
+                O ARQUITETO POR TRÁS DA JORNADA
+              </h2>
+              
+              <div className="space-y-8">
+                <p className="text-xl leading-relaxed text-gray-300 font-inter">
+                  A NIALY é a materialização da visão de seu fundador, Nicolas Di Morais. Movido por uma obsessão implacável em decodificar a complexidade das viagens globais, ele transformou seu conhecimento profundo em um novo paradigma para o setor.
+                </p>
+                
+                <p className="text-xl leading-relaxed text-gray-300 font-inter">
+                  Nicolas não criou mais uma agência. Ele fundou um atelier onde jornadas não são vendidas, são comissionadas. Um ecossistema de serviço proativo e inteligência de mercado que opera sobre um princípio inegociável: a perfeição absoluta em cada detalhe.
+                </p>
+              </div>
+              
+              {/* Linha dourada elegante */}
+              <div className="w-24 h-0.5 bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] my-12 shadow-lg shadow-[#C1A36F]/50"></div>
+              
+              {/* Citação em destaque com máximo destaque */}
+              <blockquote className="text-2xl leading-relaxed text-[#C1A36F] italic font-serif mb-8 relative">
+                <div className="absolute -left-4 -top-2 text-6xl text-[#C1A36F] opacity-30 font-serif">"</div>
+                Para mim, uma viagem nunca foi um custo. É o investimento mais poderoso que um líder pode fazer em seu legado, sua família e em seus negócios. Minha obsessão é garantir que cada minuto e cada centavo desse investimento se converta em uma experiência impecável e uma memória que o tempo não pode apagar. Essa é a arquitetura NIALY.
+                <div className="absolute -right-4 -bottom-2 text-6xl text-[#C1A36F] opacity-30 font-serif">"</div>
+              </blockquote>
+              
+              {/* Assinatura */}
+              <div className="text-right">
+                <p className="text-lg font-bold text-white font-serif">
+                  – Nicolas Di Morais, Fundador & CEO
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PROVA SOCIAL - NÚMEROS */}
+      {/* PROVA SOCIAL - NÚMEROS ATUALIZADOS */}
       <section ref={statsRef} className="py-24 bg-[#0A1F44] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <h2 className="text-5xl font-bold text-center mb-20 text-white font-playfair">
+          <h2 className="text-5xl font-bold text-center mb-20 text-white font-serif">
             POR QUE MILHARES DE VIAJANTES ESCOLHERAM A NIALY?
           </h2>
           
@@ -481,91 +570,129 @@ export default function HomePage() {
               { number: counters.clientes, suffix: "+", label: "CLIENTES ATENDIDOS", description: "Viajantes que confiaram em nossa expertise" },
               { number: counters.satisfacao, suffix: "%", label: "SATISFAÇÃO TOTAL", description: "Taxa de recomendação dos nossos clientes" },
               { number: counters.destinos, suffix: "+", label: "DESTINOS EXCLUSIVOS", description: "Locais únicos em nosso portfólio" },
-              { number: counters.experiencia, suffix: " ANOS", label: "DE EXPERIÊNCIA", description: "Construindo sonhos e realizando jornadas" }
+              { number: counters.parcerias, suffix: "+", label: "PARCERIAS DE LUXO GLOBAIS", description: "Acesso a uma rede de elite com os melhores hotéis, companhias e serviços do mundo" }
             ].map((stat, index) => (
               <div key={index} className="bg-[rgba(255,255,255,0.05)] backdrop-blur-sm rounded-xl p-8 border border-[rgba(193,163,111,0.2)] animate-fadeInUp" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="text-5xl font-bold text-[#C1A36F] mb-2 font-playfair">
+                <div className="text-5xl font-bold text-[#C1A36F] mb-2 font-serif">
                   {stat.number.toLocaleString()}{stat.suffix}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-white font-playfair">{stat.label}</h3>
-                <p className="text-gray-300 text-sm font-montserrat">{stat.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-white font-serif">{stat.label}</h3>
+                <p className="text-gray-300 text-sm font-inter">{stat.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* DEPOIMENTOS - CARROSSEL INTERATIVO COM SELOS */}
+      {/* DEPOIMENTOS - CARROSSEL INTERATIVO MELHORADO COM SELOS E FEEDBACK APRIMORADO */}
       <section className="py-24 bg-[#F4F6F9]">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-serif">
             O QUE NOSSOS CLIENTES ESTÃO DIZENDO
           </h2>
           
-          <div className="relative max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-12 shadow-2xl border border-gray-100">
-              <div className="flex items-center justify-center mb-6">
+          <div className="relative max-w-5xl mx-auto">
+            {/* Card flutuante com sombra suave e feedback visual melhorado */}
+            <div className="bg-white rounded-3xl p-12 shadow-2xl border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 hover:border-[#C1A36F]/20">
+              {/* Estrelas com animação */}
+              <div className="flex items-center justify-center mb-8">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-6 h-6 text-[#C1A36F] fill-current" />
+                  <Star 
+                    key={i} 
+                    className="w-8 h-8 text-[#C1A36F] fill-current transform hover:scale-110 transition-transform duration-200" 
+                    style={{ animationDelay: `${i * 0.1}s` }}
+                  />
                 ))}
               </div>
               
-              <blockquote className="text-2xl leading-relaxed text-center mb-8 text-gray-700 italic font-montserrat">
-                "{testimonials[currentTestimonial].text}"
+              {/* Citação com melhor tipografia */}
+              <blockquote className="text-2xl leading-relaxed text-center mb-10 text-gray-700 italic font-inter relative">
+                <div className="absolute -left-4 -top-2 text-6xl text-[#C1A36F] opacity-20 font-serif">"</div>
+                {testimonials[currentTestimonial].text}
+                <div className="absolute -right-4 -bottom-2 text-6xl text-[#C1A36F] opacity-20 font-serif">"</div>
               </blockquote>
               
               <div className="text-center">
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <img 
-                    src={testimonials[currentTestimonial].image}
-                    alt={testimonials[currentTestimonial].name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="font-bold text-xl text-[#0A1F44] font-playfair">
+                {/* Perfil do cliente com hover effect */}
+                <div className="flex items-center justify-center gap-6 mb-6">
+                  <div className="relative group">
+                    <img 
+                      src={testimonials[currentTestimonial].image}
+                      alt={testimonials[currentTestimonial].name}
+                      className="w-20 h-20 rounded-full object-cover shadow-lg group-hover:shadow-xl transition-shadow duration-300"
+                    />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-t from-[#C1A36F]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-2xl text-[#0A1F44] font-serif hover:text-[#C1A36F] transition-colors duration-300">
                       {testimonials[currentTestimonial].name}
                     </div>
-                    <div className="text-gray-600 font-montserrat">
+                    <div className="text-gray-600 text-lg font-inter">
                       {testimonials[currentTestimonial].role}
                     </div>
                   </div>
                 </div>
-                {/* SELOS DE VERIFICAÇÃO */}
+                
+                {/* SELOS DE VERIFICAÇÃO MELHORADOS COM ANIMAÇÃO */}
                 {testimonials[currentTestimonial].verified && (
-                  <div className="flex justify-center gap-4">
-                    <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">
-                      <Check className="w-4 h-4" />
-                      Verificado pelo Google
+                  <div className="flex justify-center gap-6 mb-8">
+                    <div className="inline-flex items-center gap-3 bg-green-50 text-green-700 px-6 py-3 rounded-full text-sm font-bold border border-green-200 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
+                      <Check className="w-5 h-5 animate-pulse" />
+                      <span>Verificado pelo Google</span>
                     </div>
-                    <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
-                      <Check className="w-4 h-4" />
-                      Verificado por ReclameAQUI
+                    <div className="inline-flex items-center gap-3 bg-blue-50 text-blue-700 px-6 py-3 rounded-full text-sm font-bold border border-blue-200 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
+                      <Check className="w-5 h-5 animate-pulse" />
+                      <span>Verificado por ReclameAQUI</span>
                     </div>
                   </div>
                 )}
               </div>
             </div>
             
-            {/* Indicadores e navegação */}
-            <div className="flex justify-center mt-8 gap-3">
+            {/* Controles de navegação com feedback visual melhorado */}
+            <button
+              onClick={prevTestimonial}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#C1A36F] hover:bg-[#C1A36F] hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-xl border-2 border-transparent hover:border-[#C1A36F]/20"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            
+            <button
+              onClick={nextTestimonial}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#C1A36F] hover:bg-[#C1A36F] hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-xl border-2 border-transparent hover:border-[#C1A36F]/20"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+            
+            {/* Indicadores melhorados com feedback visual */}
+            <div className="flex justify-center mt-10 gap-4">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial ? 'bg-[#C1A36F] scale-125' : 'bg-gray-300'
+                  className={`w-4 h-4 rounded-full transition-all duration-300 hover:scale-125 ${
+                    index === currentTestimonial 
+                      ? 'bg-[#C1A36F] scale-125 shadow-lg shadow-[#C1A36F]/50' 
+                      : 'bg-gray-300 hover:bg-gray-400 hover:shadow-md'
                   }`}
                 />
               ))}
+            </div>
+
+            {/* Indicador de progresso sutil */}
+            <div className="flex justify-center mt-6">
+              <div className="text-sm text-gray-500 font-inter">
+                {currentTestimonial + 1} de {testimonials.length}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SERVIÇOS - CONTEÚDO ATUALIZADO */}
+      {/* SERVIÇOS - IMAGENS ATUALIZADAS COM FEEDBACK MELHORADO */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-playfair">
+          <h2 className="text-5xl font-bold text-center mb-20 text-[#0A1F44] font-serif">
             NOSSOS SERVIÇOS
           </h2>
           
@@ -579,31 +706,33 @@ export default function HomePage() {
               {
                 title: "TRANSFER E MOBILIDADE",
                 description: "Sua jornada com conforto do início ao fim. Oferecemos transfers privativos em todos os destinos, com veículos de luxo e motoristas experientes.",
-                image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&h=300&fit=crop"
+                image: "https://images.unsplash.com/photo-1563720223185-11003d516935?w=400&h=300&fit=crop"
               },
               {
                 title: "HOSPEDAGEM E RESORTS",
                 description: "Uma curadoria dos melhores hotéis e resorts do mundo. Garantimos a estadia perfeita, com pedidos especiais personalizados e experiências únicas.",
-                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop"
+                image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop"
               },
               {
                 title: "EXPERIÊNCIAS DISNEY",
                 description: "Viva a magia com a sofisticação NIALY. Arquitetamos pacotes completos com ingressos, hospedagens nos melhores resorts e assistência personalizada.",
-                image: "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&h=300&fit=crop"
+                image: "https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/f213c3ed-2d31-49fb-8dfb-3c8164ab05ff.png"
               }
             ].map((service, index) => (
-              <div key={index} className="group cursor-pointer animate-fadeInUp" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-6 shadow-xl">
+              <div key={index} className="group cursor-pointer animate-fadeInUp hover:scale-105 transition-all duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
                   <img 
                     src={service.image}
                     alt={service.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
+                  {/* Overlay com gradiente sutil */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-[#0A1F44] group-hover:text-[#C1A36F] transition-colors font-playfair">
+                <h3 className="text-xl font-bold mb-3 text-[#0A1F44] group-hover:text-[#C1A36F] transition-colors font-serif">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed font-montserrat">
+                <p className="text-gray-600 leading-relaxed font-inter group-hover:text-gray-700 transition-colors">
                   {service.description}
                 </p>
               </div>
@@ -621,10 +750,10 @@ export default function HomePage() {
         
         <div className="max-w-4xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold mb-8 text-white font-playfair">
+            <h2 className="text-5xl font-bold mb-8 text-white font-serif">
               PRONTO PARA SUA PRÓXIMA JORNADA?
             </h2>
-            <p className="text-xl text-gray-300 leading-relaxed font-montserrat">
+            <p className="text-xl text-gray-300 leading-relaxed font-inter">
               Deixe-nos criar a experiência de viagem dos seus sonhos. 
               Preencha o formulário e nossa equipe entrará em contato em até 24 horas.
             </p>
@@ -633,51 +762,51 @@ export default function HomePage() {
           <div className="glass-effect rounded-2xl p-12">
             <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Nome Completo *</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Nome Completo *</label>
                 <input
                   type="text"
-                  name="nome"
+                  name="nomeCompleto"
                   required
-                  value={formData.nome}
+                  value={formData.nomeCompleto}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                   placeholder="Seu nome completo"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">E-mail *</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">E-mail *</label>
                 <input
                   type="email"
                   name="email"
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                   placeholder="seu@email.com"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Telefone *</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Telefone *</label>
                 <input
                   type="tel"
-                  name="telefone"
+                  name="whatsapp"
                   required
-                  value={formData.telefone}
+                  value={formData.whatsapp}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                   placeholder="(11) 99999-9999"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Destino de Interesse</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Destino de Interesse</label>
                 <select
-                  name="destino"
-                  value={formData.destino}
+                  name="destinoDesejado"
+                  value={formData.destinoDesejado}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                 >
                   <option value="">Selecione um destino</option>
                   <option value="estados-unidos">Estados Unidos</option>
@@ -691,12 +820,12 @@ export default function HomePage() {
               </div>
               
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Orçamento Estimado</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Orçamento Estimado</label>
                 <select
                   name="orcamento"
                   value={formData.orcamento}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                 >
                   <option value="">Selecione uma faixa</option>
                   <option value="ate-3500">Até 3.500</option>
@@ -708,13 +837,13 @@ export default function HomePage() {
               </div>
               
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Conte-nos sobre seus sonhos de viagem</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Conte-nos sobre seus sonhos de viagem</label>
                 <textarea
-                  name="mensagem"
-                  value={formData.mensagem}
+                  name="viagemSonhos"
+                  value={formData.viagemSonhos}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none font-inter"
                   placeholder="Descreva o que você imagina para sua próxima jornada..."
                 />
               </div>
@@ -723,7 +852,7 @@ export default function HomePage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50 disabled:opacity-50 disabled:cursor-not-allowed font-montserrat"
+                  className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50 disabled:opacity-50 disabled:cursor-not-allowed font-inter"
                 >
                   {isSubmitting ? 'ENVIANDO...' : 'SOLICITAR MINHA COTAÇÃO'}
                 </button>
@@ -733,31 +862,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RODAPÉ ATUALIZADO COM NOVAS INFORMAÇÕES DE CONTATO */}
+      {/* RODAPÉ ATUALIZADO COM LINK DO INSTAGRAM FUNCIONAL */}
       <footer className="bg-[#0A1F44] py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12">
             <div className="md:col-span-2">
-              <div className="text-4xl font-bold text-[#C1A36F] mb-6 font-playfair">NIALY</div>
-              <p className="text-gray-300 leading-relaxed mb-6 font-montserrat">
+              <div className="text-4xl font-bold text-[#C1A36F] mb-6 font-serif">NIALY</div>
+              <p className="text-gray-300 leading-relaxed mb-6 font-inter">
                 A arquitetura da jornada executiva. Transformamos viagens em legados 
                 através de um serviço de ultra-luxo e uma experiência incomparável.
               </p>
               <div className="flex gap-4">
-                <a href="https://instagram.com/nialy" className="w-10 h-10 bg-[#C1A36F] rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform">
+                <a 
+                  href="https://www.instagram.com/nialytravel/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-[#C1A36F] rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform"
+                >
                   <Instagram className="w-5 h-5" />
                 </a>
               </div>
             </div>
             
             <div>
-              <h3 className="text-xl font-bold mb-6 text-[#C1A36F] font-playfair">Contato</h3>
+              <h3 className="text-xl font-bold mb-6 text-[#C1A36F] font-serif">Contato</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-[#C1A36F]" />
                   <a 
-                    href="https://wa.me/5511921731022" 
-                    className="text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat"
+                    href="tel:+5511921731022" 
+                    className="text-gray-300 hover:text-[#C1A36F] transition-colors font-inter"
                   >
                     +55 11 92173-1022
                   </a>
@@ -766,14 +900,14 @@ export default function HomePage() {
                   <Mail className="w-5 h-5 text-[#C1A36F]" />
                   <a 
                     href="mailto:atendimentonialy@gmail.com" 
-                    className="text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat"
+                    className="text-gray-300 hover:text-[#C1A36F] transition-colors font-inter"
                   >
                     atendimentonialy@gmail.com
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-[#C1A36F]" />
-                  <span className="text-gray-300 font-montserrat">
+                  <span className="text-gray-300 font-inter">
                     Alphaville, Alameda Rio Negro, 585, Barueri - SP
                   </span>
                 </div>
@@ -781,18 +915,18 @@ export default function HomePage() {
             </div>
             
             <div>
-              <h3 className="text-xl font-bold mb-6 text-[#C1A36F] font-playfair">Links</h3>
+              <h3 className="text-xl font-bold mb-6 text-[#C1A36F] font-serif">Links</h3>
               <div className="space-y-3">
-                <a href="/cotacao" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat">
+                <a href="/cotacao" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-inter">
                   Solicitar Cotação
                 </a>
-                <a href="/insiders" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat">
+                <a href="/insiders" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-inter">
                   Grupo VIP
                 </a>
-                <a href="#" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat">
+                <a href="#" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-inter">
                   Política de Privacidade
                 </a>
-                <a href="#" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-montserrat">
+                <a href="#" className="block text-gray-300 hover:text-[#C1A36F] transition-colors font-inter">
                   Termos de Uso
                 </a>
               </div>
@@ -800,19 +934,19 @@ export default function HomePage() {
           </div>
           
           <div className="border-t border-gray-700 mt-12 pt-8 text-center">
-            <p className="text-gray-400 font-montserrat">
+            <p className="text-gray-400 font-inter">
               © 2025 NIALY. Todos os direitos reservados. CNPJ/Cadastur aqui.
             </p>
           </div>
         </div>
       </footer>
 
-      {/* MODAL DE FORMULÁRIO */}
+      {/* MODAL DE FORMULÁRIO REESTRUTURADO */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="glass-effect rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="glass-effect rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-3xl font-bold text-[#C1A36F] font-playfair">INICIAR MEU PLANEJAMENTO</h3>
+              <h3 className="text-3xl font-bold text-[#C1A36F] font-serif">INICIAR MEU PLANEJAMENTO</h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white text-2xl"
@@ -824,73 +958,126 @@ export default function HomePage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Nome Completo *</label>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Nome Completo *</label>
                   <input
                     type="text"
-                    name="nome"
+                    name="nomeCompleto"
                     required
-                    value={formData.nome}
+                    value={formData.nomeCompleto}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                     placeholder="Seu nome completo"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">E-mail *</label>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">E-mail *</label>
                   <input
                     type="email"
                     name="email"
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                     placeholder="seu@email.com"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Telefone *</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">WhatsApp (com DDD) *</label>
                 <input
                   type="tel"
-                  name="telefone"
+                  name="whatsapp"
                   required
-                  value={formData.telefone}
+                  value={formData.whatsapp}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                   placeholder="(11) 99999-9999"
                 />
               </div>
               
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Origem *</label>
+                  <input
+                    type="text"
+                    name="origem"
+                    required
+                    value={formData.origem}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
+                    placeholder="De onde você parte?"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Destino Desejado *</label>
+                  <input
+                    type="text"
+                    name="destinoDesejado"
+                    required
+                    value={formData.destinoDesejado}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
+                    placeholder="Para onde deseja ir?"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Data de Ida *</label>
+                  <input
+                    type="date"
+                    name="dataIda"
+                    required
+                    value={formData.dataIda}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Data de Volta *</label>
+                  <input
+                    type="date"
+                    name="dataVolta"
+                    required
+                    value={formData.dataVolta}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
+                  />
+                </div>
+              </div>
+              
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Destino de Interesse</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Flexibilidade de Datas *</label>
                 <select
-                  name="destino"
-                  value={formData.destino}
+                  name="flexibilidadeDatas"
+                  required
+                  value={formData.flexibilidadeDatas}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-inter"
                 >
-                  <option value="">Selecione um destino</option>
-                  <option value="estados-unidos">Estados Unidos</option>
-                  <option value="europa">Europa</option>
-                  <option value="america-sul">América do Sul</option>
-                  <option value="caribe-mexico">Caribe & México</option>
-                  <option value="asia">Ásia</option>
-                  <option value="brasil">Brasil</option>
-                  <option value="outro">Outro</option>
+                  <option value="">Selecione uma opção</option>
+                  <option value="datas-exatas">Datas Exatas</option>
+                  <option value="mais-menos-3-dias">+/- 3 dias</option>
+                  <option value="mais-menos-7-dias">+/- 7 dias</option>
+                  <option value="sou-flexivel">Sou Flexível</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Conte-nos sobre seus sonhos de viagem</label>
+                <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-inter">Conte-nos sobre sua viagem dos sonhos... *</label>
                 <textarea
-                  name="mensagem"
-                  value={formData.mensagem}
+                  name="viagemSonhos"
+                  required
+                  value={formData.viagemSonhos}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none font-montserrat"
-                  placeholder="Descreva o que você imagina para sua próxima jornada..."
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none font-inter"
+                  placeholder="Descreva seus sonhos, expectativas e preferências para esta viagem especial..."
                 />
               </div>
               
@@ -898,7 +1085,7 @@ export default function HomePage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50 disabled:opacity-50 disabled:cursor-not-allowed font-montserrat"
+                  className="bg-gradient-to-r from-[#C1A36F] to-[#D4AF37] text-black px-12 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-[#C1A36F]/50 disabled:opacity-50 disabled:cursor-not-allowed font-inter"
                 >
                   {isSubmitting ? 'ENVIANDO...' : 'ENVIAR SOLICITAÇÃO'}
                 </button>

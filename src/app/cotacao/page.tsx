@@ -8,17 +8,24 @@ export default function CotacaoLP() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
+    // Passo 1 - Detalhes da Viagem
+    origem: '',
     destino: '',
-    dataViagem: '',
-    duracao: '',
-    passageiros: '',
-    orcamento: '',
-    tipoViagem: '',
-    hospedagem: '',
-    observacoes: ''
+    dataIda: '',
+    dataVolta: '',
+    flexibilidadeDatas: '',
+    numeroPassageiros: '',
+    classePreferida: '',
+    
+    // Passo 2 - Preferências e Orçamento
+    orcamentoEstimado: '',
+    preferenciaHospedagem: '',
+    observacoesEspeciais: '',
+    
+    // Passo 3 - Dados Pessoais
+    nomeCompleto: '',
+    email: '',
+    whatsapp: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,29 +41,24 @@ export default function CotacaoLP() {
     setIsSubmitting(true);
     
     try {
-      // Enviar dados para o webhook do n8n
       const response = await fetch('https://nialytravel.app.n8n.cloud/webhook/8ee524af-00c1-4785-9242-560cf7d1de4c', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          fonte: 'Landing Page de Cotação',
-          timestamp: new Date().toISOString()
-        }),
+        body: JSON.stringify(formData)
       });
 
       if (response.ok) {
-        console.log('Formulário de cotação enviado:', formData);
-        
-        // Redirecionar para página de agradecimento
+        console.log('Formulário de cotação enviado com sucesso:', formData);
         router.push('/obrigado-cotacao');
       } else {
-        console.error('Erro ao enviar formulário');
+        throw new Error('Erro no envio');
       }
     } catch (error) {
-      console.error('Erro de conexão:', error);
+      console.error('Erro no envio:', error);
+      // Fallback: ainda redireciona para não quebrar a experiência
+      router.push('/obrigado-cotacao');
     } finally {
       setIsSubmitting(false);
     }
@@ -269,7 +271,7 @@ export default function CotacaoLP() {
           </div>
         </section>
 
-        {/* FORMULÁRIO MULTI-ETAPAS */}
+        {/* FORMULÁRIO MULTI-ETAPAS REESTRUTURADO */}
         <section className="py-24 bg-black/30 backdrop-blur-sm relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
@@ -305,56 +307,123 @@ export default function CotacaoLP() {
                 ))}
               </div>
               <div className="text-center text-gray-300 font-montserrat">
-                Etapa {currentStep} de 3
+                Passo {currentStep} de 3
               </div>
             </div>
             
             <div className="glass-effect rounded-2xl p-12">
               <form onSubmit={handleSubmit}>
-                {/* ETAPA 1 - DADOS PESSOAIS */}
+                {/* PASSO 1 - DETALHES DA SUA VIAGEM */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
-                    <h3 className="text-2xl font-bold text-[#C1A36F] mb-8 font-playfair">Seus Dados</h3>
+                    <h3 className="text-2xl font-bold text-[#C1A36F] mb-8 font-playfair">Passo 1 de 3: "Detalhes da Sua Viagem"</h3>
                     
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Nome Completo *</label>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Origem *</label>
                         <input
                           type="text"
-                          name="nome"
+                          name="origem"
                           required
-                          value={formData.nome}
+                          value={formData.origem}
                           onChange={handleInputChange}
                           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                          placeholder="Seu nome completo"
+                          placeholder="De onde você parte?"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">E-mail *</label>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Destino *</label>
                         <input
-                          type="email"
-                          name="email"
+                          type="text"
+                          name="destino"
                           required
-                          value={formData.email}
+                          value={formData.destino}
                           onChange={handleInputChange}
                           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                          placeholder="seu@email.com"
+                          placeholder="Para onde deseja ir?"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Data de Ida *</label>
+                        <input
+                          type="date"
+                          name="dataIda"
+                          required
+                          value={formData.dataIda}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Data de Volta *</label>
+                        <input
+                          type="date"
+                          name="dataVolta"
+                          required
+                          value={formData.dataVolta}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                         />
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Telefone *</label>
-                      <input
-                        type="tel"
-                        name="telefone"
+                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Flexibilidade de Datas *</label>
+                      <select
+                        name="flexibilidadeDatas"
                         required
-                        value={formData.telefone}
+                        value={formData.flexibilidadeDatas}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                        placeholder="(11) 99999-9999"
-                      />
+                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                      >
+                        <option value="">Selecione uma opção</option>
+                        <option value="datas-exatas">Datas Exatas</option>
+                        <option value="mais-menos-3-dias">+/- 3 dias</option>
+                        <option value="mais-menos-7-dias">+/- 7 dias</option>
+                        <option value="sou-flexivel">Sou Flexível</option>
+                      </select>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Número de Passageiros *</label>
+                        <select
+                          name="numeroPassageiros"
+                          required
+                          value={formData.numeroPassageiros}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                        >
+                          <option value="">Selecione</option>
+                          <option value="1">1 pessoa</option>
+                          <option value="2">2 pessoas</option>
+                          <option value="3">3 pessoas</option>
+                          <option value="4">4 pessoas</option>
+                          <option value="5-mais">5 ou mais pessoas</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Classe Preferida *</label>
+                        <select
+                          name="classePreferida"
+                          required
+                          value={formData.classePreferida}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                        >
+                          <option value="">Selecione</option>
+                          <option value="economica">Econômica</option>
+                          <option value="economica-premium">Econômica Premium</option>
+                          <option value="executiva">Executiva</option>
+                          <option value="primeira-classe">Primeira Classe</option>
+                        </select>
+                      </div>
                     </div>
                     
                     <div className="text-center">
@@ -369,89 +438,61 @@ export default function CotacaoLP() {
                   </div>
                 )}
 
-                {/* ETAPA 2 - DETALHES DA VIAGEM */}
+                {/* PASSO 2 - PREFERÊNCIAS E ORÇAMENTO */}
                 {currentStep === 2 && (
                   <div className="space-y-6">
-                    <h3 className="text-2xl font-bold text-[#C1A36F] mb-8 font-playfair">Detalhes da Viagem</h3>
+                    <h3 className="text-2xl font-bold text-[#C1A36F] mb-8 font-playfair">Passo 2 de 3: "Preferências e Orçamento"</h3>
                     
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Destino Desejado *</label>
-                        <input
-                          type="text"
-                          name="destino"
-                          required
-                          value={formData.destino}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                          placeholder="Ex: Paris, Maldivas, Japão..."
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Data da Viagem</label>
-                        <input
-                          type="date"
-                          name="dataViagem"
-                          value={formData.dataViagem}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Duração</label>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Orçamento Estimado por Pessoa *</label>
                         <select
-                          name="duracao"
-                          value={formData.duracao}
+                          name="orcamentoEstimado"
+                          required
+                          value={formData.orcamentoEstimado}
                           onChange={handleInputChange}
                           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                         >
-                          <option value="">Selecione a duração</option>
-                          <option value="3-5-dias">3 a 5 dias</option>
-                          <option value="1-semana">1 semana</option>
-                          <option value="2-semanas">2 semanas</option>
-                          <option value="1-mes">1 mês</option>
-                          <option value="mais-1-mes">Mais de 1 mês</option>
+                          <option value="">Selecione uma faixa</option>
+                          <option value="ate-3500">Até R$ 3.500</option>
+                          <option value="5k-10k">R$ 5.000 - R$ 10.000</option>
+                          <option value="10k-15k">R$ 10.000 - R$ 15.000</option>
+                          <option value="15k-25k">R$ 15.000 - R$ 25.000</option>
+                          <option value="acima-25k">Acima de R$ 25.000</option>
                         </select>
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Número de Passageiros</label>
+                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Preferência de Hospedagem *</label>
                         <select
-                          name="passageiros"
-                          value={formData.passageiros}
+                          name="preferenciaHospedagem"
+                          required
+                          value={formData.preferenciaHospedagem}
                           onChange={handleInputChange}
                           className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
                         >
                           <option value="">Selecione</option>
-                          <option value="1">1 pessoa</option>
-                          <option value="2">2 pessoas</option>
-                          <option value="3-4">3 a 4 pessoas</option>
-                          <option value="5-10">5 a 10 pessoas</option>
-                          <option value="mais-10">Mais de 10 pessoas</option>
+                          <option value="somente-passagem">Somente passagem</option>
+                          <option value="hotel-4-5-estrelas">Hotel (4 ou 5 estrelas)</option>
+                          <option value="resort">Resort</option>
+                          <option value="cruzeiro">Cruzeiro</option>
+                          <option value="aluguel-temporada">Aluguel de Temporada (Casas e Villas)</option>
+                          <option value="hotel-boutique">Hotel Boutique</option>
                         </select>
                       </div>
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Tipo de Viagem</label>
-                      <select
-                        name="tipoViagem"
-                        value={formData.tipoViagem}
+                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Observações Especiais *</label>
+                      <textarea
+                        name="observacoesEspeciais"
+                        required
+                        value={formData.observacoesEspeciais}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                      >
-                        <option value="">Selecione o tipo</option>
-                        <option value="lazer">Lazer</option>
-                        <option value="negocios">Negócios</option>
-                        <option value="lua-mel">Lua de Mel</option>
-                        <option value="familia">Família</option>
-                        <option value="aventura">Aventura</option>
-                        <option value="cultural">Cultural</option>
-                      </select>
+                        rows={4}
+                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none font-montserrat"
+                        placeholder="Conte-nos sobre suas preferências, ocasiões especiais, etc..."
+                      />
                     </div>
                     
                     <div className="flex gap-4 justify-center">
@@ -473,56 +514,47 @@ export default function CotacaoLP() {
                   </div>
                 )}
 
-                {/* ETAPA 3 - PREFERÊNCIAS E ORÇAMENTO */}
+                {/* PASSO 3 - SEUS DADOS PESSOAIS */}
                 {currentStep === 3 && (
                   <div className="space-y-6">
-                    <h3 className="text-2xl font-bold text-[#C1A36F] mb-8 font-playfair">Preferências e Orçamento</h3>
+                    <h3 className="text-2xl font-bold text-[#C1A36F] mb-8 font-playfair">Passo 3 de 3: "Seus Dados Pessoais"</h3>
                     
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Orçamento Estimado</label>
-                        <select
-                          name="orcamento"
-                          value={formData.orcamento}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                        >
-                          <option value="">Selecione uma faixa</option>
-                          <option value="ate-3500">Até 3.500</option>
-                          <option value="5k-10k">R$ 5.000 - R$ 10.000</option>
-                          <option value="10k-15k">R$ 10.000 - R$ 15.000</option>
-                          <option value="15k-25k">R$ 15.000 - R$ 25.000</option>
-                          <option value="acima-25k">Acima de R$ 25.000</option>
-                        </select>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Preferência de Hospedagem</label>
-                        <select
-                          name="hospedagem"
-                          value={formData.hospedagem}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
-                        >
-                          <option value="">Selecione</option>
-                          <option value="hotel-4-5-estrelas">Hotel (4 ou 5 estrelas)</option>
-                          <option value="resort">Resort</option>
-                          <option value="cruzeiro">Cruzeiro</option>
-                          <option value="aluguel-temporada">Aluguel de Temporada (Casas e Villas)</option>
-                          <option value="hotel-boutique">Hotel Boutique</option>
-                        </select>
-                      </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Nome Completo *</label>
+                      <input
+                        type="text"
+                        name="nomeCompleto"
+                        required
+                        value={formData.nomeCompleto}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                        placeholder="Seu nome completo"
+                      />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Observações Especiais</label>
-                      <textarea
-                        name="observacoes"
-                        value={formData.observacoes}
+                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">Seu melhor E-mail *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        value={formData.email}
                         onChange={handleInputChange}
-                        rows={4}
-                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors resize-none font-montserrat"
-                        placeholder="Conte-nos sobre suas preferências especiais, restrições alimentares, ocasiões especiais, etc..."
+                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                        placeholder="seu@email.com"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold mb-2 text-[#C1A36F] font-montserrat">WhatsApp (com DDD) *</label>
+                      <input
+                        type="tel"
+                        name="whatsapp"
+                        required
+                        value={formData.whatsapp}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#C1A36F] transition-colors font-montserrat"
+                        placeholder="(11) 99999-9999"
                       />
                     </div>
                     
