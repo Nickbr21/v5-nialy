@@ -182,8 +182,8 @@ export default function CotacaoLP() {
                       <Check className="w-5 h-5 text-black" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2 text-white font-playfair">Expertise Incomparável</h3>
-                      <p className="text-gray-300 font-montserrat">15 anos de experiência criando jornadas exclusivas para executivos e empresários de alto nível.</p>
+                      <h3 className="text-xl font-bold mb-2 text-white font-playfair">EXPERTISE VISIONÁRIA</h3>
+                      <p className="text-gray-300 font-montserrat">Não seguimos o mercado; nós o redefinimos. Nossa abordagem de vanguarda antecipa tendências e aplica soluções inovadoras para criar jornadas que são o futuro das viagens de luxo.</p>
                     </div>
                   </div>
                   
