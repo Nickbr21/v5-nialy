@@ -7,17 +7,26 @@ export default function IntermediariaInsidersPage() {
   const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
+    // Garantir que o código só execute no cliente (navegador)
+    if (typeof window === 'undefined') return;
+
     const timer = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
-          // Redirecionar para o WhatsApp - Correção avançada para contornar bloqueios de iframe/sandbox
-          window.top.location.href = 'https://bit.ly/NialyVIP';
+          // Verificar se window.top existe antes de tentar acessar
+          if (window.top && window.top.location) {
+            window.top.location.href = 'https://bit.ly/NialyVIP';
+          } else if (window.location) {
+            // Fallback para window.location se window.top não estiver disponível
+            window.location.href = 'https://bit.ly/NialyVIP';
+          }
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
+    // Função de limpeza para evitar vazamentos de memória
     return () => clearInterval(timer);
   }, []);
 
