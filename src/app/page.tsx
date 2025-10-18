@@ -522,18 +522,13 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ... (código final da seção "Quem Somos" termina aqui) ... */}
-        </div>
-      </section>
-
-      {/* ======================================================================= */}
-      {/* PROVA SOCIAL - NÚMEROS E DEPOIMENTOS */}
+{/* ======================================================================= */}
+      {/* INÍCIO DA SEÇÃO DE PROVA SOCIAL */}
       {/* ======================================================================= */}
       <section>
         {/* Aqui começa o código da sua seção "Por que Milhares de Viajantes..." */}
         <div className="bg-[#0A1F44] py-24 sm:py-32">
-          {/* ... (resto do código da prova social) ... */}
+          {/* ... (o resto do código da prova social continua aqui) ... */}
       <section ref={statsRef} className="py-24 bg-[#0A1F44] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
