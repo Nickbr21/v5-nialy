@@ -460,15 +460,24 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             {/* Foto do Fundador - Lado Esquerdo - MAIOR E MELHOR POSICIONADA */}
-            <div className="relative animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative group">
-                {/* Foto em cores normais com alta resolução - CENTRALIZADA E GRANDE */}
-                <img 
-              
-  src="/nicolas-di-morais.jpg"
-  alt="Nicolas Di Morais - Fundador NIALY"
-  ...
-/>
+            {/* Bloco da Foto do Fundador */}
+<div className="relative animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+  <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative group">
+    
+    {/* Sua Imagem - O código foi corrigido aqui */}
+    <img
+      src="/nicolas-di-morais.jpg"
+      alt="Nicolas Di Morais - Fundador NIALY"
+      className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-105"
+    />
+
+    {/* Overlay sutil para aumentar contraste */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+  </div>
+
+  {/* Efeito de luz ao redor da foto */}
+  <div className="absolute -inset-4 bg-gradient-to-r from-[#C1A36F]/20 to-[#D4AF37]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+</div>
                 {/* Overlay sutil para aumentar contraste */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               </div>
