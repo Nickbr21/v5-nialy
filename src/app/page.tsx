@@ -464,10 +464,11 @@ export default function HomePage() {
               <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative group">
                 {/* Foto em cores normais com alta resolução - CENTRALIZADA E GRANDE */}
                 <img 
-                  src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/de28120a-2e4a-480b-8001-2e747c6fd624.jpg"
-                  alt="Nicolas Di Morais - Fundador NIALY"
-                  className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-105"
-                />
+              
+  src="/nicolas-di-morais.jpg"
+  alt="Nicolas Di Morais - Fundador NIALY"
+  ...
+/>
                 {/* Overlay sutil para aumentar contraste */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               </div>
