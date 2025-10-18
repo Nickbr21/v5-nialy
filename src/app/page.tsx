@@ -460,24 +460,14 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             {/* Foto do Fundador - Lado Esquerdo - MAIOR E MELHOR POSICIONADA */}
-            {/* Bloco da Foto do Fundador */}
-<div className="relative animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-  <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative group">
-    
-    {/* Sua Imagem - O código foi corrigido aqui */}
-    <img
-      src="/nicolas-di-morais.jpg"
-      alt="Nicolas Di Morais - Fundador NIALY"
-      className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-105"
-    />
-
-    {/* Overlay sutil para aumentar contraste */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-  </div>
-
-  {/* Efeito de luz ao redor da foto */}
-  <div className="absolute -inset-4 bg-gradient-to-r from-[#C1A36F]/20 to-[#D4AF37]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-</div>
+            <div className="relative animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative group">
+                {/* Foto em cores normais com alta resolução - CENTRALIZADA E GRANDE */}
+                <img 
+                  src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/de28120a-2e4a-480b-8001-2e747c6fd624.jpg"
+                  alt="Nicolas Di Morais - Fundador NIALY"
+                  className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-105"
+                />
                 {/* Overlay sutil para aumentar contraste */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               </div>
@@ -523,13 +513,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ======================================================================= */}
-      {/* INÍCIO DA SEÇÃO DE PROVA SOCIAL */}
-      {/* ======================================================================= */}
-      <section>
-        {/* Aqui começa o código da sua seção "Por que Milhares de Viajantes..." */}
-        <div className="bg-[#0A1F44] py-24 sm:py-32">
-          {/* ... (o resto do código da prova social continua aqui) ... */}
+      {/* PROVA SOCIAL - NÚMEROS ATUALIZADOS */}
       <section ref={statsRef} className="py-24 bg-[#0A1F44] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C1A36F] rounded-full blur-3xl"></div>
